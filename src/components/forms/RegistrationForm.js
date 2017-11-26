@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 class RegistrationForm extends Component {
 	
@@ -16,18 +17,22 @@ class RegistrationForm extends Component {
     }
     
 	onChange = (e) => {
-	    // Because we named the inputs to match their corresponding values in state, it's
-	    // super easy to update the state
 	    const state = this.state
 	    state[e.target.name] = e.target.value;
 	    this.setState(state);
 	}
 
 	onSubmit = (e) => {
+		const cookies = new Cookies();
+		console.log(cookies.get('token')); // Pacman
 	    e.preventDefault();
 	    const { title, firstname, lastname, email, password, confirmpassword } = this.state;
 
-	    axios.post('http://localhost:8080/register', 
+	    const api = axios.create({
+	    	withCredentials: true
+	    });
+	    
+	    api.post('http://localhost:8080/register', 
 	    	{
 	    	  "users":{
 	    	    "username": email,
@@ -54,11 +59,7 @@ class RegistrationForm extends Component {
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
-		    	console.log(error.response.status);
-		    	console.log(error.message);
-		    	console.log(JSON.stringify(error.response.headers, null, '\t'));
-		    	console.log(JSON.stringify(error.response.data, null, '\t'));
-		    	if(error.response.status == 409) {
+		    	if(error.response.status === 409) {
 		    		alert(error.message);
 		    	}
 	    	}
