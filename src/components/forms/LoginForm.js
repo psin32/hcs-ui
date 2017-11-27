@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {withRouter} from "react-router-dom";
 
 class LoginForm extends Component {
 	
@@ -7,7 +8,8 @@ class LoginForm extends Component {
         super();
         this.state = {
           email: '',
-          password: ''
+          password: '',
+          incorrectLoginError : false
         };
     }
     
@@ -32,37 +34,46 @@ class LoginForm extends Component {
 	    	}
 	    )
 	    .then((response) => {
-	    	console.log(response.status);
-	    	console.log(response.statusText);
+	    	if (response.status === 200) {
+	    		this.props.history.push("/myaccount#details");
+	    	}
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
-		    	if(error.response.status === 409) {
-		    		alert(error.message);
+		    	if(error.response.status === 401) {
+		    		document.getElementById("errormessage").style.display = "block";
 		    	}
 	    	}
-	    });  
+	    }); 
 	}
 
 	render() {
 		
 		const { title, firstname, lastname, email, password, confirmpassword} = this.state;
+
 	    return (
-	          <form id="contact-form"  onSubmit={this.onSubmit} className="custom-form form">
-	              <div className="controls">
-	                    <div className="form-group">
-	                      <label for="username">Username *</label>
-	                      <input type="text" name="email" id="email" placeholder="Enter your username" required="required" className="form-control" value={email} onChange={this.onChange} />
-	                    </div>
-		                  <div className="form-group">
-		                    <label for="password">Password *</label>
-		                    <input type="password" name="password" id="password" placeholder="Enter your password" required="required" className="form-control" value={password} onChange={this.onChange} />
-		                  </div>
-	                <input type="submit" value="Login" className="btn btn-primary"/>
-	              </div>
-	          </form>
+	    	  <div className="col-md-6">
+	    	  	  <div id="errormessage" style= {{display: 'none'}}>
+			    	  <div className="alert alert-danger">
+						  <strong>ERROR!</strong> Username and password does not match.
+				      </div>
+				  </div>
+		          <form id="contact-form"  onSubmit={this.onSubmit} className="custom-form form">
+		              <div className="controls">
+		                    <div className="form-group">
+		                      <label for="username">Username *</label>
+		                      <input type="text" name="email" id="email" placeholder="Enter your username" required="required" className="form-control" value={email} onChange={this.onChange} />
+		                    </div>
+			                  <div className="form-group">
+			                    <label for="password">Password *</label>
+			                    <input type="password" name="password" id="password" placeholder="Enter your password" required="required" className="form-control" value={password} onChange={this.onChange} />
+			                  </div>
+		                <input type="submit" value="Login" className="btn btn-primary"/>
+		              </div>
+		          </form>
+	          </div>
 	    );
 	}
 }
 
-export default LoginForm;
+export default withRouter(LoginForm);

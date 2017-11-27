@@ -10,7 +10,7 @@ class Navbar extends Component {
 
     return (
     	    <nav className="navbar navbar-expand-md">
-    	      <div className="container"><a href="/" className="navbar-brand"> <img src="img/logo.png" alt="logo"></img></a>
+    	      <div className="container"><a href="/" className="navbar-brand"> <img src="/img/logo.png" alt="logo"></img></a>
     	        <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" className="navbar-toggler navbar-toggler-right">Menu <i className="fa fa-bars"></i></button>
     	        <div id="navbarSupportedContent" className="collapse navbar-collapse">
     	          <ul className="navbar-nav ml-auto d-md-flex flex-md-row align-items-md-center">
@@ -21,7 +21,6 @@ class Navbar extends Component {
     	              </ul>
     	            </li>
     	            <li className="nav-item"><a href="category.html" className="nav-link">Category</a></li>
-    	            <li className="nav-item"><a href="blog.html" className="nav-link">Blog</a></li>
     	            <li className="nav-item"><a id="navbarDropdown2" data-target="#" href="http://example.com" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">Template content<i className="fa fa-caret-down"></i></a>
     	              <ul aria-labelledby="navbarDropdown2" className="dropdown-menu">
     	                <li><a href="index.html" className="dropdown-item">Homepage 1</a></li>
@@ -46,11 +45,11 @@ class Navbar extends Component {
     	            {tokenCookie ? (
     	    	            <li className="nav-item"><a id="navbarDropdown2" data-target="#" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">Welcome {name}<i className="fa fa-caret-down"></i></a>
     	    	              <ul aria-labelledby="navbarDropdown2" className="dropdown-menu">
-    	    	                <li><a href="/myaccount" className="dropdown-item">Address book</a></li>
+    	    	              	<li><a href="/myaccount#details" className="dropdown-item">My Details</a></li>
+    	    	                <li><a href="/myaccount#address" className="dropdown-item">My Addresses</a></li>
     	    	                <li><a href="/myaccount" className="dropdown-item">Your Orders</a></li>
     	    	                <li><a href="/myaccount" className="dropdown-item">Credit & debit cards</a></li>
-    	    	                <li><a href="/myaccount" className="dropdown-item">Go to your account</a></li>
-    	    	                <li><a href="/myaccount" className="dropdown-item"><b>Log out</b></a></li>
+    	    	                <li><a href="/clearcookie#logout" className="dropdown-item"><b>Log out</b></a></li>
     	    	              </ul>
     	    	            </li>
     	            ) : (

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import {withRouter} from "react-router-dom";
 
 class RegistrationForm extends Component {
 	
@@ -54,13 +55,14 @@ class RegistrationForm extends Component {
 	    	}
 	    )
 	    .then((response) => {
-	    	console.log(response.status);
-	    	console.log(response.statusText);
+	    	if (response.status === 200) {
+	    		this.props.history.push("/myaccount#details");
+	    	}
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
 		    	if(error.response.status === 409) {
-		    		alert(error.message);
+		    		document.getElementById("errormessage").style.display = "block";
 		    	}
 	    	}
 	    });  
@@ -71,6 +73,11 @@ class RegistrationForm extends Component {
 		const { title, firstname, lastname, email, password, confirmpassword} = this.state;
 	    return (
 	          <form id="contact-form"  onSubmit={this.onSubmit} className="custom-form form">
+				<div id="errormessage" style= {{display: 'none'}}>
+					<div className="alert alert-danger">
+						<strong>ERROR!</strong> Email address already registered with us.
+					</div>
+				</div>
 	            <div className="controls">
 	                  <div className="form-group">
 	                    <label for="title">Title *</label>
@@ -103,4 +110,4 @@ class RegistrationForm extends Component {
 	}
 }
 
-export default RegistrationForm;
+export default withRouter(RegistrationForm);

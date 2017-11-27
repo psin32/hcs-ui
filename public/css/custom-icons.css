@@ -2,11 +2,11 @@
 
 @font-face {
   font-family: "camera-house";
-  src:url("../fonts/camera-house.eot");
-  src:url("../fonts/camera-house.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/camera-house.woff") format("woff"),
-    url("../fonts/camera-house.ttf") format("truetype"),
-    url("../fonts/camera-house.svg#camera-house") format("svg");
+  src:url("/fonts/camera-house.eot");
+  src:url("/fonts/camera-house.eot?#iefix") format("embedded-opentype"),
+    url("/fonts/camera-house.woff") format("woff"),
+    url("/fonts/camera-house.ttf") format("truetype"),
+    url("/fonts/camera-house.svg#camera-house") format("svg");
   font-weight: normal;
   font-style: normal;
 
