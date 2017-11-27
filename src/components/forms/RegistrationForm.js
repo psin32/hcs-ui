@@ -24,7 +24,7 @@ class RegistrationForm extends Component {
 
 	onSubmit = (e) => {
 		const cookies = new Cookies();
-		console.log(cookies.get('token')); // Pacman
+		console.log(cookies.get('TOKEN')); // Pacman
 	    e.preventDefault();
 	    const { title, firstname, lastname, email, password, confirmpassword } = this.state;
 
@@ -49,7 +49,7 @@ class RegistrationForm extends Component {
 	    	    "firstname": firstname,
 	    	    "lastname": lastname,
 	    	    "isprimary" : 0,
-	    	    "selfaddress" : 0
+	    	    "selfaddress" : 1
 	    	  }
 	    	}
 	    )

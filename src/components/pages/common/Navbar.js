@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import Cookies from 'universal-cookie';
 
 class Navbar extends Component {
   render() {
+	  
+	const cookies = new Cookies();
+	const tokenCookie = cookies.get('TOKEN');
+	const name = cookies.get('USERNAME');
+
     return (
     	    <nav className="navbar navbar-expand-md">
     	      <div className="container"><a href="/" className="navbar-brand"> <img src="img/logo.png" alt="logo"></img></a>
@@ -37,8 +43,24 @@ class Navbar extends Component {
     	                </li>
     	              </ul>
     	            </li>
-    	            <li className="nav-item"><a href="/login" className="nav-link">Sign In</a></li>
-    	            <li className="nav-item"><a href="/registration" className="nav-link">Register</a></li>
+    	            {tokenCookie ? (
+    	    	            <li className="nav-item"><a id="navbarDropdown2" data-target="#" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">Welcome {name}<i className="fa fa-caret-down"></i></a>
+    	    	              <ul aria-labelledby="navbarDropdown2" className="dropdown-menu">
+    	    	                <li><a href="/myaccount" className="dropdown-item">Address book</a></li>
+    	    	                <li><a href="/myaccount" className="dropdown-item">Your Orders</a></li>
+    	    	                <li><a href="/myaccount" className="dropdown-item">Credit & debit cards</a></li>
+    	    	                <li><a href="/myaccount" className="dropdown-item">Go to your account</a></li>
+    	    	                <li><a href="/myaccount" className="dropdown-item"><b>Log out</b></a></li>
+    	    	              </ul>
+    	    	            </li>
+    	            ) : (
+    	    	            <li className="nav-item">
+    	    	              <ul className="list-inline">
+    	    	                <li className="list-inline-item"><a href="/login" className="nav-link">Sign In</a></li>
+    	    	                <li className="list-inline-item"><a href="/registration" className="nav-link">Register</a></li>
+    	    	              </ul>
+    	    	            </li>
+    	            )}
     	            <li className="nav-item">
     	              <ul className="list-inline">
     	                <li className="list-inline-item"><a id="search" href="#" className="nav-link">
