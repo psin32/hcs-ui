@@ -57,6 +57,17 @@ class MyaccountLanding extends Component {
 			cardSectionClass : 'list-group-item'
 		};
 	}
+	
+	let myaddressComponent = null;
+	if(this.state.showAddressComponent) {
+		myaddressComponent = <Myaddress />
+	}
+
+	let mydetailsComponent = null;
+	if(this.state.showDetailsComponent) {
+		mydetailsComponent = <Mydetails />
+	}
+		
     return (
 		<div>
 	      <Navbar />
@@ -76,14 +87,8 @@ class MyaccountLanding extends Component {
 							<a className="list-group-item with-badge" href="/myaccount">My Tickets</a>
 						</nav>
 					</div>
-					{this.state.showAddressComponent ?
-					           <Myaddress />  :
-					           null
-					}
-					{this.state.showDetailsComponent ?
-					           <Mydetails />  :
-					           null
-					}
+					{myaddressComponent}
+					{mydetailsComponent}
 				</div>
 			</div>
 	      </section>

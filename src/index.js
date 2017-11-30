@@ -11,6 +11,7 @@ import Timeout from './components/pages/Timeout/Timeout';
 import AccessDenied from './components/pages/AccessDenied/AccessDenied';
 import PageNotFound from './components/pages/PageNotFound/PageNotFound';
 import PDP from './components/pages/PDP/ProductDetail.js';
+import Category from './components/pages/Category/Category.js';
 
 ReactDOM.render(
 		<BrowserRouter>
@@ -25,6 +26,7 @@ ReactDOM.render(
 					<Route path="/timeout" component={Timeout} ></Route>
 					<Route path="/accessdenied" component={AccessDenied} ></Route>
 					<Route path="/product/:productname" component={PDP} ></Route>
+					<Route path="/category/:category" component={Category} ></Route>
 					<Route path="*" component={PageNotFound} status={404}/>
 				</Switch>
 			</div>

@@ -1,0 +1,11 @@
+@media (min-width: 1000px) {
+.hidden-md {
+  display: block;
+  }
+}
+
+@media (max-width: 999px) {
+.hidden-md {
+  display: none;
+  }
+}
