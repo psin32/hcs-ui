@@ -12,6 +12,7 @@ ADD . /usr/src/app
 # Install dependencies
 WORKDIR /usr/src/app
 
+RUN ls -ltrsh
 
 # Build for production.
 RUN npm run build --production
