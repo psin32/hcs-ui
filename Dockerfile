@@ -9,10 +9,10 @@ ENV NPM_CONFIG_LOGLEVEL warn
 RUN mkdir -p /usr/src/app
 ADD . /usr/src/app
 
-RUN npm install
-
 # Install dependencies
 WORKDIR /usr/src/app
+
+RUN npm install
 
 # Build for production.
 RUN npm run build --production
