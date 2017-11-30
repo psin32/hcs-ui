@@ -29,7 +29,7 @@ class ProductDetails extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://localhost:8090/catentry/url/'+url)
+	    api.get('http://hcs-catalog:8090/catentry/url/'+url)
 	    .then((response) => {
 	    	
             this.setState({

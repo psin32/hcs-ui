@@ -33,7 +33,7 @@ class RegistrationForm extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.post('http://localhost:8080/register', 
+	    api.post('http://hcs-user:8080/register', 
 	    	{
 	    	  "users":{
 	    	    "username": email,

@@ -25,7 +25,7 @@ class Category extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://localhost:8090/category/url/'+url)
+	    api.get('http://hcs-catalog:8090/category/url/'+url)
 	    .then((response) => {
             this.setState({
     			data : response.data,

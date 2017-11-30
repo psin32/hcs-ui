@@ -16,7 +16,7 @@ class SubcategoriesSidePanel extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://localhost:8090/category/subcategories/'+this.props.data)
+	    api.get('http://hcs-catalog:8090/category/subcategories/'+this.props.data)
 	    .then((response) => {
             this.setState({
             	data : response.data
