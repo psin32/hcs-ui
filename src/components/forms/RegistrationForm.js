@@ -32,8 +32,8 @@ class RegistrationForm extends Component {
 	    const api = axios.create({
 	    	withCredentials: true
 	    });
-	    
-	    api.post('http://hcs-user:8080/register', 
+
+	    api.post(document.location.protocol + "//" +document.location.hostname+':443/register', 
 	    	{
 	    	  "users":{
 	    	    "username": email,

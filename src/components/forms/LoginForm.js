@@ -27,7 +27,7 @@ class LoginForm extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.post('http://hcs-user:8080/login', 
+	    api.post(document.location.protocol + "//" +document.location.hostname+':443/login', 
 	    	{
 	    	    "username": email,
 	    	    "password": password

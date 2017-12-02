@@ -46,7 +46,7 @@ class Myaddress extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://hcs-user:8080/address/'+userId)
+	    api.get(document.location.protocol + "//" +document.location.hostname+':443/api/address/'+userId)
 	    .then((response) => {
             this.setState({
     			data : response.data,
@@ -220,7 +220,7 @@ class Myaddress extends Component {
 	    	headers: {'Authorization': 'Bearer '+this.state.token},
 	    	withCredentials: true
 	    });	    
-	    api.post('http://hcs-user:8080/address/update', 
+	    api.patch('http://localhost:8080/api/address', 
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{
