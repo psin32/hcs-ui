@@ -43,7 +43,8 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://localhost:8080/api/address/selfaddress/'+userId)
+	    let url = document.location.protocol + "//" +document.location.hostname+':443/api/address/selfaddress/'+userId;
+	    api.get(url)
 	    .then((response) => {
 	    	console.log(response.data);
             this.setState({
@@ -101,7 +102,9 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });	    
 	    
-	    api.patch(document.location.protocol + "//" +document.location.hostname+':443/api/address/)
+	    let url = document.location.protocol + "//" +document.location.hostname+':443/api/address';
+	    
+	    api.patch(url,
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{

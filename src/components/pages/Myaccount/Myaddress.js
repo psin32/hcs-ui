@@ -220,7 +220,7 @@ class Myaddress extends Component {
 	    	headers: {'Authorization': 'Bearer '+this.state.token},
 	    	withCredentials: true
 	    });	    
-	    api.patch('http://localhost:8080/api/address', 
+	    api.patch(document.location.protocol + "//" +document.location.hostname+':443/api/address', 
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{
