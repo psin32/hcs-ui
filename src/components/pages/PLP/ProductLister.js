@@ -16,7 +16,7 @@ class ProductLister extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://hcs-catalog:8090/catentry/'+this.props.data)
+	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/catentry/'+this.props.data)
 	    .then((response) => {
             this.setState({
             	data : response.data

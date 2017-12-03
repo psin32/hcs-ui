@@ -16,7 +16,7 @@ class Navbar extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://hcs-catalog:8090/category/topnav')
+	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/category/topnav')
 	    .then((response) => {
             this.setState({
     			data : response.data
