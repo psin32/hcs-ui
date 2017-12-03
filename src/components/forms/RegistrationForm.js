@@ -33,7 +33,7 @@ class RegistrationForm extends Component {
 	    	withCredentials: true
 	    });
 
-	    api.put(document.location.protocol + "//" +document.location.hostname+':443/api/register', 
+	    api.post(document.location.protocol + "//" +document.location.hostname+':443/register', 
 	    	{
 	    	  "users":{
 	    	    "username": email,
