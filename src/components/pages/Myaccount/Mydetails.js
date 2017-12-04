@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
+import Loader from '../common/Loader.js'
 
 class Mydetails extends Component {
 
@@ -29,11 +30,12 @@ class Mydetails extends Component {
 			phone2 : "",
 			nickname : "",
 			userId : "",
-			token : ""
+			token : "",
+			responseReceived : false
 		};
 	}
 	
-	componentDidMount() {
+	componentWillMount() {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
 		const userId = cookies.get('USER_ID');
@@ -43,13 +45,17 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let url = document.location.protocol + "//" +document.location.hostname+':443/api/address/selfaddress/'+userId;
+	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    
+	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address/selfaddress/'+userId;
+	    
 	    api.get(url)
 	    .then((response) => {
 	    	console.log(response.data);
             this.setState({
     			userId : userId,
-    			token : token
+    			token : token,
+    			responseReceived : true
             });	    	
             this.setState({
             	addressId : response.data.addressId,
@@ -76,6 +82,9 @@ class Mydetails extends Component {
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
 		    	if(error.response.status === 403) {
 		    		if (null == token) {
 		    			this.props.history.push("/clearcookie#accessdenied");
@@ -94,6 +103,10 @@ class Mydetails extends Component {
 	}
 
 	onSubmit = (e) => {
+		this.setState({
+			responseReceived : false
+        });		
+		
 	    e.preventDefault();
 	    const {userId, addressId, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nickname} = this.state;
 
@@ -102,7 +115,9 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });	    
 	    
-	    let url = document.location.protocol + "//" +document.location.hostname+':443/api/address';
+	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    
+	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address';
 	    
 	    api.patch(url,
 	    	{
@@ -131,6 +146,7 @@ class Mydetails extends Component {
 	    )
 	    .then((response) => {
 	    	if (response.status === 200) {
+	    		document.getElementById("updatemessage").style.display = "block";
 	    	}
             this.setState({
             	addressId : response.data.addressId,
@@ -152,11 +168,16 @@ class Mydetails extends Component {
 				status : response.data.status,
 				email2 : response.data.email2,
 				phone2 : response.data.phone2,
-				nickname : response.data.nickname
+				nickname : response.data.nickname,
+				responseReceived : true
             });
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+
 		    	if(error.response.status === 403) {
 		    		if (null == this.state.token) {
 		    			this.props.history.push("/clearcookie#accessdenied");
@@ -173,6 +194,12 @@ class Mydetails extends Component {
 	    const {userId, addressId, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nichname} = this.state;
 	    return (
 				<div className="col-lg-8">
+					<Loader data={this.state.responseReceived}/>
+				    <div id="updatemessage" style= {{display: 'none'}}>
+						<div className="alert alert-success">
+							<strong>Success!</strong> Your details updated successfully.
+						</div>
+				    </div>
 					<div className="padding-top-2x mt-2 hidden-lg-up"></div>
 					<h4>My Details</h4>
 					<hr className="padding-bottom-1x"/>

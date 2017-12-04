@@ -5,7 +5,7 @@ import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import axios from 'axios';
-import $ from 'jquery'
+import Loader from '../common/Loader.js'
 
 class ProductDetails extends Component {
 
@@ -19,7 +19,8 @@ class ProductDetails extends Component {
 		    listpricedata : [],
 		    primarycategory : "",
 		    responseok : false,
-		    pagenotfound : false
+		    pagenotfound : false,
+		    responseReceived : false
 		};
 	}
 	
@@ -29,7 +30,9 @@ class ProductDetails extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/catentry/url/'+url)
+	    let productDetailsURL = process.env.REACT_APP_CATALOG_APP_GET_PRODUCTDETAIL_URL;
+	    
+	    api.get(productDetailsURL +url)
 	    .then((response) => {
 	    	
             this.setState({
@@ -38,7 +41,8 @@ class ProductDetails extends Component {
     			fullimagedata : response.data.fullimage,
     			categoriesdata : response.data.categories,
     			listpricedata : response.data.listprice,
-    			responseok : true
+    			responseok : true,
+    			responseReceived : true
             });
             
             response.data.categories.map((alldata, index) => {
@@ -51,6 +55,10 @@ class ProductDetails extends Component {
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+
 		    	if(error.response.status === 404) {
 		            this.setState({
 		    			pagenotfound : true
@@ -117,6 +125,7 @@ class ProductDetails extends Component {
 			<div>
 		      <Navbar />
 		      <SearchPanel />
+		      <Loader data={this.state.responseReceived}/>
 		      <div className="details-page">
 			      <div className="container">
 			        <ol className="breadcrumb">

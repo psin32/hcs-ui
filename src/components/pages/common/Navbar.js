@@ -16,7 +16,9 @@ class Navbar extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/category/topnav')
+	    let topNavURL = process.env.REACT_APP_CATALOG_APP_GET_TOPNAV_URL;
+	    
+	    api.get(topNavURL)
 	    .then((response) => {
             this.setState({
     			data : response.data

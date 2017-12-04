@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {withRouter} from "react-router-dom";
+import Loader from '../common/Loader.js'
 import axios from 'axios';
 
 class SubcategoriesSidePanel extends Component {
@@ -7,7 +8,8 @@ class SubcategoriesSidePanel extends Component {
 	constructor() {
 		super();
 		this.state = {
-		    data : []
+		    data : [],
+		    responseok : false
 		};
 	}
 	
@@ -16,10 +18,13 @@ class SubcategoriesSidePanel extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/category/subcategories/'+this.props.data)
+	    let subcategoryDetailsURL = process.env.REACT_APP_CATALOG_APP_GET_SUBCATEGORY_DETAILS_URL;
+	    
+	    api.get(subcategoryDetailsURL +this.props.data)
 	    .then((response) => {
             this.setState({
-            	data : response.data
+            	data : response.data,
+            	responseok : true
             });
 	    })
 	    .catch((error) => {
@@ -41,6 +46,7 @@ class SubcategoriesSidePanel extends Component {
 
 	    return (
 	        <div className="simple-list">
+	        	<Loader data={this.state.responseok}/>
 	        	<div className="left-navigation">
 	        		<nav role="navigation">
 	        			<ul>

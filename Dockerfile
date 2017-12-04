@@ -15,7 +15,7 @@ WORKDIR /usr/src/app
 RUN npm install
 
 # Build for production.
-RUN npm run build --production
+RUN npm run build .env.production --production
 
 # Install `serve` to run the application.
 RUN npm install -g serve

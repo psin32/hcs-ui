@@ -32,8 +32,10 @@ class RegistrationForm extends Component {
 	    const api = axios.create({
 	    	withCredentials: true
 	    });
+	    
+	    let port = process.env.REACT_APP_USER_APP_PORT;
 
-	    api.post(document.location.protocol + "//" +document.location.hostname+':443/register', 
+	    api.post(document.location.protocol + "//" +document.location.hostname + port +'/register', 
 	    	{
 	    	  "users":{
 	    	    "username": email,

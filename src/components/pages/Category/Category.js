@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom";
 import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
+import Loader from '../common/Loader.js'
 import SubcategoriesSidePanel from './SubcategoriesSidePanel.js'
 import ProductLister from '../PLP/ProductLister.js'
 import axios from 'axios';
@@ -25,7 +26,9 @@ class Category extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get('http://psingh-eval-prod.apigee.net/catalog-service/category/url/'+url)
+	    const categoryDetailsURL = process.env.REACT_APP_CATALOG_APP_GET_CATEGORY_DETAILS_URL;
+	    
+	    api.get(categoryDetailsURL +url)
 	    .then((response) => {
             this.setState({
     			data : response.data,
@@ -45,6 +48,7 @@ class Category extends Component {
 	}
 
 	render() {
+		
 		let subcategories = null;
 	    if(this.state.responseok) {
 	    	subcategories = <SubcategoriesSidePanel data={this.state.data.identifier}/>
@@ -141,6 +145,7 @@ class Category extends Component {
 			<div>
 		      <Navbar />
 		      <SearchPanel />
+		        <Loader data={this.state.responseok}/>
 				<div className="container">
 					<ol className="breadcrumb">
 						<li className="breadcrumb-item text-uppercase"> <a href="/" className="text-primary">Home</a></li>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {withRouter} from "react-router-dom";
+import Loader from '../pages/common/Loader.js'
 
 class LoginForm extends Component {
 	
@@ -9,7 +10,8 @@ class LoginForm extends Component {
         this.state = {
           email: '',
           password: '',
-          incorrectLoginError : false
+          incorrectLoginError : false,
+          responseReceived : true
         };
     }
     
@@ -20,6 +22,9 @@ class LoginForm extends Component {
 	}
 
 	onSubmit = (e) => {
+		this.setState({
+        	responseok : false
+        });		
 	    e.preventDefault();
 	    const { email, password} = this.state;
 
@@ -27,18 +32,26 @@ class LoginForm extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.post(document.location.protocol + "//" +document.location.hostname+':443/login', 
+	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    
+	    api.post(document.location.protocol + "//" +document.location.hostname + port +'/login', 
 	    	{
 	    	    "username": email,
 	    	    "password": password
 	    	}
 	    )
 	    .then((response) => {
+			this.setState({
+				responseReceived : true
+	        });		
 	    	if (response.status === 200) {
 	    		this.props.history.push("/myaccount#details");
 	    	}
 	    })
 	    .catch((error) => {
+			this.setState({
+				responseReceived : true
+	        });		
 	    	if (error.response) {
 		    	if(error.response.status === 401) {
 		    		document.getElementById("errormessage").style.display = "block";
@@ -48,11 +61,11 @@ class LoginForm extends Component {
 	}
 
 	render() {
-		
 		const { title, firstname, lastname, email, password, confirmpassword} = this.state;
 
 	    return (
 	    	  <div className="col-md-6">
+	    	 	  <Loader data={this.state.responseReceived}/>
 	    	  	  <div id="errormessage" style= {{display: 'none'}}>
 			    	  <div className="alert alert-danger">
 						  <strong>ERROR!</strong> Username and password does not match.

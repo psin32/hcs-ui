@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
+import Loader from '../common/Loader.js'
 
 class Myaddress extends Component {
 
@@ -34,7 +35,8 @@ class Myaddress extends Component {
 			shipping : false,
 			billing : false,
 			noaddress : false,
-			newaddress : false
+			newaddress : false,
+			responseReceived : false
 		};
 	}
 	
@@ -52,12 +54,15 @@ class Myaddress extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    api.get(document.location.protocol + "//" +document.location.hostname+':443/api/address/'+userId)
+	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    
+	    api.get(document.location.protocol + "//" +document.location.hostname + port +'/api/address/'+userId)
 	    .then((response) => {
             this.setState({
     			data : response.data,
     			userId : userId,
-    			token : token
+    			token : token,
+    			responseReceived : true
             });	   
             if(response.data.length > 0) {
             	this.setState({
@@ -77,6 +82,9 @@ class Myaddress extends Component {
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
 		    	if(error.response.status === 403) {
 		    		if (null == token) {
 		    			this.props.history.push("/clearcookie#accessdenied");
@@ -107,6 +115,11 @@ class Myaddress extends Component {
 	}
     
 	onSubmit = (e) => {
+		
+		this.setState({
+			responseReceived : false
+        });		
+
 	    e.preventDefault();
 	    
 	    const {userId, addressId, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nickname, shipping, billing} = this.state;
@@ -131,8 +144,10 @@ class Myaddress extends Component {
         } else {
         	selectedAddressType = "S";
         }
+        
+        let port = process.env.REACT_APP_USER_APP_PORT;
 
-	    api.patch(document.location.protocol + "//" +document.location.hostname+':443/api/address', 
+	    api.patch(document.location.protocol + "//" +document.location.hostname + port +'/api/address', 
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{
@@ -171,6 +186,9 @@ class Myaddress extends Component {
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
 		    	if(error.response.status === 403) {
 		    		if (null == this.state.token) {
 		    			this.props.history.push("/clearcookie#accessdenied");
@@ -280,6 +298,7 @@ class Myaddress extends Component {
 	    if(this.state.noaddress && !this.state.newaddress) {
 	    	return (
 					<div className="col-lg-8">
+						<Loader data={this.state.responseReceived}/>
 						<div className="padding-top-2x mt-2 hidden-lg-up"></div>
 						<h4>Address</h4>
 						<hr className="padding-bottom-1x"/>
@@ -350,7 +369,8 @@ class Myaddress extends Component {
 
 	    return (
 				<div className="col-lg-8">
-				    <div id="updatemessage" style= {{display: 'none'}}>
+					<Loader data={this.state.responseReceived}/>
+					<div id="updatemessage" style= {{display: 'none'}}>
 						<div className="alert alert-success">
 							<strong>Success!</strong> Your address is successfully updated
 						</div>

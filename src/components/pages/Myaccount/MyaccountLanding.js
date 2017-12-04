@@ -4,8 +4,6 @@ import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import Myaddress from './Myaddress.js'
 import Mydetails from './Mydetails.js'
-import axios from 'axios';
-import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
 
 class MyaccountLanding extends Component {
