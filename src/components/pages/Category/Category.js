@@ -13,13 +13,15 @@ class Category extends Component {
 	constructor() {
 		super();
 		this.state = {
-		    data : [],
+		    categorydata : [],
+		    subcategorydata: [],
+		    catentrydata: [],
 		    description : [],
 		    responseok : false,
 		    pagenotfound : false
 		};
 	}
-	
+
 	componentWillMount() {
 		const url = this.props.match.params.category;
 	    const api = axios.create({
@@ -31,8 +33,10 @@ class Category extends Component {
 	    api.get(categoryDetailsURL +url)
 	    .then((response) => {
             this.setState({
-    			data : response.data,
-    			description : response.data.description,
+            	categorydata : response.data.category,
+            	subcategorydata : response.data.subcategories,
+            	catentrydata : response.data.catentries,
+    			description : response.data.category.description,
     			responseok : true
             });
 	    })
@@ -50,13 +54,13 @@ class Category extends Component {
 	render() {
 		
 		let subcategories = null;
-	    if(this.state.responseok) {
-	    	subcategories = <SubcategoriesSidePanel data={this.state.data.identifier}/>
+	    if(this.state.responseok && this.state.subcategorydata.length>0) {
+	    	subcategories = <SubcategoriesSidePanel data={this.state.subcategorydata}/>
 	    }
 
 	    let products = null;
 	    if(this.state.responseok) {
-	    	products = <ProductLister data={this.state.data.identifier}/>
+	    	products = <ProductLister data={this.state.catentrydata}/>
 	    }
 
 	    let pagenotfound = null;
@@ -86,7 +90,7 @@ class Category extends Component {
 	    }
 
 		let topnavCategoryContent = null;
-		if(this.state.data.topnav) {
+		if(this.state.categorydata.topnav) {
 			topnavCategoryContent = (
 		          	<div className="items">
 		          		<div className="row">

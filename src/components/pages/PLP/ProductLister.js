@@ -6,36 +6,10 @@ class ProductLister extends Component {
 
 	constructor() {
 		super();
-		this.state = {
-		    data : []
-		};
 	}
 	
-	componentDidMount() {
-	    const api = axios.create({
-	    	withCredentials: true
-	    });
-	    
-	    let productListingURL = process.env.REACT_APP_CATALOG_APP_GET_PRODUCTLISTING_URL;
-	    
-	    api.get(productListingURL + this.props.data)
-	    .then((response) => {
-            this.setState({
-            	data : response.data
-            });
-	    })
-	    .catch((error) => {
-	    	if (error.response) {
-		    	if(error.response.status === 400) {
-	    			this.props.history.push("/clearcookie#accessdenied");
-		    	}
-	    	}
-	    });
-	}
-
 	render() {
-		
-	    const products = this.state.data.map((alldata, index) => {
+	    const products = this.props.data.map((alldata, index) => {
 		      return (
 						<div class="col-lg-3 col-md-4 col-sm-6">
 							<div class="item text-center">
