@@ -47,7 +47,6 @@ class Myaddress extends Component {
 	fetchAllAddresses() {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
-		const userId = cookies.get('USER_ID');
 
 	    const api = axios.create({
 	    	headers: {'Authorization': 'Bearer '+token},
@@ -56,11 +55,10 @@ class Myaddress extends Component {
 	    
 	    let port = process.env.REACT_APP_USER_APP_PORT;
 	    
-	    api.get(document.location.protocol + "//" +document.location.hostname + port +'/api/address/'+userId)
+	    api.get(document.location.protocol + "//" +document.location.hostname + port +'/api/address')
 	    .then((response) => {
             this.setState({
     			data : response.data,
-    			userId : userId,
     			token : token,
     			responseReceived : true
             });	   
@@ -454,7 +452,6 @@ class Myaddress extends Component {
 							<hr className="margin-top-1x margin-bottom-1x"/>
 							{formButton}
 						</div>
-						<input type="hidden" id="userId" name="userId" value={userId} />
 					</form>
 				</div>
 	    );

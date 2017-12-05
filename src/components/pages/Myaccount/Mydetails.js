@@ -38,7 +38,6 @@ class Mydetails extends Component {
 	componentWillMount() {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
-		const userId = cookies.get('USER_ID');
 
 	    const api = axios.create({
 	    	headers: {'Authorization': 'Bearer '+token},
@@ -47,13 +46,12 @@ class Mydetails extends Component {
 	    
 	    let port = process.env.REACT_APP_USER_APP_PORT;
 	    
-	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address/selfaddress/'+userId;
+	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address/selfaddress';
 	    
 	    api.get(url)
 	    .then((response) => {
 	    	console.log(response.data);
             this.setState({
-    			userId : userId,
     			token : token,
     			responseReceived : true
             });	    	
@@ -235,7 +233,6 @@ class Mydetails extends Component {
 								<input type="submit" value="Save" className="btn btn-primary margin-bottom-none" />
 							</div>
 						</div>
-						<input type="hidden" id="userId" name="userId" value={userId} />
 						<input type="hidden" id="addressId" name="addressId" value={addressId} />
 					</form>
 				</div>
