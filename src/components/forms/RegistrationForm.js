@@ -105,7 +105,7 @@ class RegistrationForm extends Component {
 	                    <label for="confirmpassword">Confirm password *</label>
 	                    <input type="password" name="confirmpassword" id="√" placeholder="Confirm your password" required="required" className="form-control" value={confirmpassword} onChange={this.onChange} />
 	                  </div>
-	              <input type="submit" value="Register" className="btn btn-primary"/>
+	              <input type="submit" value="Register" className="btn btn-unique"/>
 	            </div>
 	          </form>
 	    );

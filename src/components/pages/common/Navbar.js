@@ -76,7 +76,7 @@ class Navbar extends Component {
 	    	              <ul className="list-inline">
 	    	                <li className="list-inline-item"><a id="search" href="#" className="nav-link">
 	    	                    <div className="icon search"><i className="icon-magnifying-glass"></i></div></a></li>
-	    	                <li className="list-inline-item"><a href="cart.html" className="nav-link">
+	    	                <li className="list-inline-item"><a href="/basket" className="nav-link">
 	    	                    <div className="icon cart"><i className="icon-cart"></i></div></a></li>
 	    	              </ul>
 	    	            </li>

@@ -81,7 +81,7 @@ class LoginForm extends Component {
 			                    <label for="password">Password *</label>
 			                    <input type="password" name="password" id="password" placeholder="Enter your password" required="required" className="form-control" value={password} onChange={this.onChange} />
 			                  </div>
-		                <input type="submit" value="Login" className="btn btn-primary"/>
+		                <input type="submit" value="Login" className="btn btn-unique"/>
 		              </div>
 		          </form>
 	          </div>

@@ -6,6 +6,7 @@ import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import axios from 'axios';
 import Loader from '../common/Loader.js'
+import AddItemForm from '../../forms/AddItemForm.js';
 
 class ProductDetails extends Component {
 
@@ -20,7 +21,8 @@ class ProductDetails extends Component {
 		    primarycategory : "",
 		    responseok : false,
 		    pagenotfound : false,
-		    responseReceived : false
+		    responseReceived : false,
+		    quantity : 1
 		};
 	}
 	
@@ -67,8 +69,22 @@ class ProductDetails extends Component {
 	    	}
 	    });
 	}
+	
+	onChange = (e) => {
+	    const state = this.state
+	    state[e.target.name] = e.target.value;
+	    this.setState(state);
+	}
+	
+	onClickQuantity = (e) => {
+	    this.setState({
+	    	quantity : document.getElementById("quantity").value
+        });
+	}
 
 	render() {
+		
+		const { quantity} = this.state;
 		const fullImages = this.state.fullimagedata.map((alldata, index) => {
 		      return (
 		    		  <div className="item"> <img src={alldata.url} /></div>
@@ -90,8 +106,6 @@ class ProductDetails extends Component {
 	              </div>
 		      );
 		});
-		
-		console.log(this.state.categoriesdata[0]);
 		
 		const primarycategory = <a href={"/category/" + this.state.primarycategory.toString().replace(" ", "-")} className="text-primary">{ this.state.primarycategory}</a>;
 		
@@ -166,9 +180,9 @@ class ProductDetails extends Component {
 			                    </li>
 			                    <li className="list-inline-item"> 
 			                      <div className="counter d-flex align-items-center justify-content-start">
-			                        <div className="minus-btn"><i className="icon-android-remove"></i></div>
-			                        <input type="text" value="1" className="quantity"/>
-			                        <div className="plus-btn"><i className="icon-android-add"></i></div>
+			                        <div className="minus-btn"><i className="icon-android-remove" onClick={this.onClickQuantity}></i></div>
+			                        <input type="text" value={quantity} name="quantity" id="quantity" className="quantity" onChange={this.onChange}/>
+			                        <div className="plus-btn"><i className="icon-android-add" onClick={this.onClickQuantity}></i></div>
 			                      </div>
 			                    </li>
 			                  </ul>
@@ -176,7 +190,9 @@ class ProductDetails extends Component {
 			              </div>
 			              <div className="CTAs"> 
 			                <ul className="list-inline">
-			                  <li className="list-inline-item"><a href="#" className="btn btn-unique">Add To Cart</a></li>
+			                  <li className="list-inline-item">
+			                  	<AddItemForm partnumber={this.state.data.partnumber} quantity={this.state.quantity}/>
+			                  </li>
 			                </ul>
 			              </div>
 			              <div className="specifications">

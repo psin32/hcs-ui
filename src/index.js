@@ -12,6 +12,7 @@ import AccessDenied from './components/pages/AccessDenied/AccessDenied';
 import PageNotFound from './components/pages/PageNotFound/PageNotFound';
 import PDP from './components/pages/PDP/ProductDetail.js';
 import Category from './components/pages/Category/Category.js';
+import Basket from './components/pages/Basket/Basket.js';
 
 ReactDOM.render(
 		<BrowserRouter>
@@ -27,6 +28,7 @@ ReactDOM.render(
 					<Route path="/accessdenied" component={AccessDenied} ></Route>
 					<Route path="/product/:productname" component={PDP} ></Route>
 					<Route path="/category/:category" component={Category} ></Route>
+					<Route path="/basket" component={Basket} ></Route>
 					<Route path="*" component={PageNotFound} status={404}/>
 				</Switch>
 			</div>
