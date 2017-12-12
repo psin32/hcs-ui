@@ -34,10 +34,11 @@ class Navbar extends Component {
 	}
 	
 	render() {
-
+		
 		const cookies = new Cookies();
 		const tokenCookie = cookies.get('TOKEN');
 		const name = cookies.get('USERNAME');
+		const basketCount = cookies.get('BASKET_COUNT');
 	    const categories = this.state.data.map((alldata, index) => {
 		      return (
 		    		<li className="list-inline-item"><a href={"/category/"+alldata.url } className="nav-link">{alldata.description.name}</a></li>
@@ -72,14 +73,21 @@ class Navbar extends Component {
 	    	    	            </li>
 	    	            )}
 	    	            
-	    	            <li className="nav-item">
-	    	              <ul className="list-inline">
-	    	                <li className="list-inline-item"><a id="search" href="#" className="nav-link">
-	    	                    <div className="icon search"><i className="icon-magnifying-glass"></i></div></a></li>
-	    	                <li className="list-inline-item"><a href="/basket" className="nav-link">
-	    	                    <div className="icon cart"><i className="icon-cart"></i></div></a></li>
-	    	              </ul>
-	    	            </li>
+							<li className="nav-item">
+							    <ul className="list-inline">
+							       <li className="list-inline-item">
+							          <a id="search" href="#" className="nav-link">
+							             <div className="icon search"><i className="icon-magnifying-glass"></i></div>
+							          </a>
+							       </li>
+							       <li className="list-inline-item">
+							          <a href="/basket" className="nav-link">
+							             <div className="icon cart"><i className="icon-cart"></i></div>
+							             <span className="d-md-none d-lg-inline"><span className="no" id="basketCount" ref="basketCount">{basketCount}</span>items</span>
+							          </a>
+							       </li>
+							    </ul>
+							</li>
 	    	          </ul>
 	    	        </div>
 	    	      </div>

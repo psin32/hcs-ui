@@ -6,6 +6,7 @@ import Loader from '../common/Loader.js'
 import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
+import EmptyBasket from './EmptyBasket.js';
 
 class Basket extends Component {
 
@@ -14,6 +15,7 @@ class Basket extends Component {
 		this.state = {
 		    data : [],
 		    basketTotal : 0,
+		    emptyBasket : false,
 			responseReceived : false
 		};
 	}
@@ -35,15 +37,21 @@ class Basket extends Component {
 	    
 	    api.get(basketURL)
 	    .then((response) => {
-	    	console.log(response.data);
-            this.setState({
-    			token : token,
-    			responseReceived : true
-            });	    	
-            this.setState({
-            	data : response.data.items,
-            	basketTotal : response.data.basketTotal
-            });
+	    	if(response.data.items == null) {
+	            this.setState({
+	    			emptyBasket : true,
+	    			responseReceived : true
+	            });	    	
+	    	} else {
+	            this.setState({
+	    			token : token,
+	    			responseReceived : true
+	            });	    	
+	            this.setState({
+	            	data : response.data.items,
+	            	basketTotal : response.data.basketTotal
+	            });
+	    	}
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
@@ -61,19 +69,9 @@ class Basket extends Component {
 	    });
 	}
 	
-	onClickBasketCount = (e) => {
-	    const state = this.state
-	    state[e.target.name] = e.target.value;
-	    this.setState(state);
-
+	updateBasket(partnumber, quantity) {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
-
-		this.setState({
-        	responseok : false
-        });		
-		e.preventDefault();
-	    const {partnumber, quantity} = this.state;
 
 	    const api = axios.create({
 	    	headers: {'Authorization': 'Bearer '+token},
@@ -84,17 +82,22 @@ class Basket extends Component {
 	    
 	    api.patch(updateBasketURL,
 	    	{
-	    	    "partnumber": e.target.name,
-	    	    "quantity": e.target.value
+	    	    "partnumber": partnumber,
+	    	    "quantity": quantity
 	    	}
 	    )
 	    .then((response) => {
-			this.setState({
-            	data : response.data.items,
-            	basketTotal : response.data.basketTotal,
-            	responseReceived : true
-	        });		
-	    	if (response.status === 200) {
+	    	if(response.data.items == null) {
+	            this.setState({
+	    			emptyBasket : true,
+	    			responseReceived : true
+	            });	    	
+	    	} else {
+				this.setState({
+	            	data : response.data.items,
+	            	basketTotal : response.data.basketTotal,
+	            	responseReceived : true
+		        });		
 	    	}
 	    })
 	    .catch((error) => {
@@ -102,8 +105,102 @@ class Basket extends Component {
 				responseReceived : true
 	        });		
 	    	if (error.response) {
-		    	if(error.response.status === 401) {
-		    		document.getElementById("errormessage").style.display = "block";
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+	    }); 
+	}
+	
+	handleQuantityChange = (idx) => (evt) => {
+		this.setState({
+			responseReceived : false
+        });		
+		const updateData = this.state.data.map((alldata, sidx) => {
+			if (idx !== sidx) {
+				return alldata;
+			} else {
+				this.updateBasket(alldata.partnumber, evt.target.value);
+				return { ...alldata, quantity: evt.target.value };
+			}
+		});
+		this.setState({ data: updateData });
+	}
+	
+	handleQuantityIncrease = (idx) => (evt) => {
+		this.setState({
+			responseReceived : false
+        });		
+		const updateData = this.state.data.map((alldata, sidx) => {
+			if (idx !== sidx) {
+				return alldata;
+			} else {
+				this.updateBasket(alldata.partnumber, parseInt(document.getElementById(alldata.partnumber).value) +1);
+				return { ...alldata, quantity: parseInt(document.getElementById(alldata.partnumber).value) +1 };
+			}
+		});
+		this.setState({ data: updateData });
+	}
+	
+	handleQuantityDecrease = (idx) => (evt) => {
+		this.setState({
+			responseReceived : false
+        });		
+		const updateData = this.state.data.map((alldata, sidx) => {
+			if (idx !== sidx) {
+				return alldata;
+			} else {
+				this.updateBasket(alldata.partnumber, parseInt(document.getElementById(alldata.partnumber).value) -1);
+				return { ...alldata, quantity: parseInt(document.getElementById(alldata.partnumber).value) -1 };
+			}
+		});
+		this.setState({ data: updateData });
+	}
+	
+	handleDeleteItem = (e) => {
+		this.setState({
+			responseReceived : false
+        });		
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+	    
+	    let deleteItemURL = process.env.REACT_APP_BASKET_APP_DELETE_ITEM_URL;
+	    
+	    api.delete(deleteItemURL + e.target.title)
+	    .then((response) => {
+	    	if(response.data.items == null) {
+	            this.setState({
+	    			emptyBasket : true,
+	    			responseReceived : true
+	            });	    	
+	    	} else {
+				this.setState({
+	            	data : response.data.items,
+	            	basketTotal : response.data.basketTotal,
+	            	responseReceived : true
+		        });		
+	    	}
+	    })
+	    .catch((error) => {
+			this.setState({
+				responseReceived : true
+	        });		
+	    	if (error.response) {
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
 		    	}
 	    	}
 	    }); 
@@ -111,6 +208,13 @@ class Basket extends Component {
 	
     render() {
     	
+    	let emptybasket = null;
+	    if(this.state.emptyBasket) {
+	    	return (
+					<EmptyBasket />
+	    	);
+	    };
+
 	    const items = this.state.data.map((alldata, index) => {
 		      return (
 			            <div className="row cart-item">
@@ -129,13 +233,13 @@ class Basket extends Component {
 			               <div className="col-2"><strong>£{ alldata.listprice }</strong></div>
 			               <div className="col-2">
 			                  <div className="product-quantity d-flex align-items-center justify-content-center">
-			                     <div className="minus-btn"><i className="icon-android-remove" onClick={this.onClickBasketCount}></i></div>
-			                     <input type="text" value={ alldata.quantity } id={alldata.partnumber} name={alldata.partnumber} className="quantity" onChange={this.onClickBasketCount}/>
-			                     <div className="plus-btn"><i className="icon-android-add" onClick={this.onClickBasketCount}></i></div>
+			                     <div className="minus-btn"><i className="icon-android-remove" title={alldata.partnumber} onClick={this.handleQuantityDecrease(index)}></i></div>
+			                     <input type="text" value={ alldata.quantity } id={alldata.partnumber} name={alldata.partnumber} className="quantity" onChange={this.handleQuantityChange(index)}/>
+			                     <div className="plus-btn"><i className="icon-android-add" title={alldata.partnumber} onClick={this.handleQuantityIncrease(index)}></i></div>
 			                  </div>
 			               </div>
 			               <div className="col-2"><strong>£{ alldata.itemtotal }</strong></div>
-			               <div className="col-1"><a href="#"><i className="fa fa-close"></i></a></div>
+			               <div className="col-1"><a href="#"><i className="fa fa-close" title={alldata.partnumber} onClick={this.handleDeleteItem}></i></a></div>
 			            </div>		    		  
 		      );
 		});
@@ -148,7 +252,7 @@ class Basket extends Component {
 						<Loader data={this.state.responseReceived}/>
 						<div className="container">
 							<ol className="breadcrumb">
-							<li className="breadcrumb-item text-uppercase"> <a href="index.html" className="text-primary">Home</a></li>
+							<li className="breadcrumb-item text-uppercase"> <a href="/" className="text-primary">Home</a></li>
 							<li className="breadcrumb-item active text-uppercase">Shopping Cart</li>
 							</ol>
 						</div>

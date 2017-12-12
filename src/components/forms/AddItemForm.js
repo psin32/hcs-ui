@@ -3,6 +3,7 @@ import axios from 'axios';
 import {withRouter} from "react-router-dom";
 import Loader from '../pages/common/Loader.js';
 import Cookies from 'universal-cookie';
+import jquery from 'jquery';
 
 class AddItemForm extends Component {
 	
@@ -26,6 +27,7 @@ class AddItemForm extends Component {
 		const token = cookies.get('TOKEN');
 
 		this.setState({
+			responseReceived : false,
         	responseok : false
         });		
 	    e.preventDefault();
@@ -49,6 +51,10 @@ class AddItemForm extends Component {
 				responseReceived : true
 	        });		
 	    	if (response.status === 200) {
+	    		document.getElementById("successmessage").style.display = "block";
+	    		jquery('#successmessage').delay(3000).hide(1000);
+	    		const basketCount = cookies.get('BASKET_COUNT');
+	    		document.getElementById("basketCount").innerText = basketCount;
 	    	}
 	    })
 	    .catch((error) => {
@@ -66,12 +72,23 @@ class AddItemForm extends Component {
 	render() {
 	    return (
 	    	  <li>
-	    	 	  <Loader data={this.state.responseReceived}/>
 		          <form id="addtobag-form"  onSubmit={this.onSubmit} className="custom-form form">
 			            <input type="hidden" id="partnumber" name="partnumber" value={this.props.partnumber} />
 			            <input type="hidden" id="quantity" name="quantity" value={this.props.quantity} />
 			            <input type="submit" value="Add To Bag" className="btn btn-unique"/>
+			            <Loader data={this.state.responseReceived}/>
 		          </form>
+			      <p className="cart-feedback success" style= {{display: 'none'}} id="successmessage">
+			      	<i className="fa fa-check"></i> 
+			      	Thanks! Your item is added to the cart! 
+			      	<span>
+			      		<a href="/basket" className="cart">View Basket</a>
+			      		<a href="/checkout" className="checkout">checkout</a>
+			      	</span>
+			      </p>
+			      <p className="cart-feedback error" style= {{display: 'none'}} id="errormessage">
+			      	Unable to add this item, please check later.
+			      </p>			      
 	          </li>
 	    );
 	}

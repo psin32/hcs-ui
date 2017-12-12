@@ -11,6 +11,7 @@ class ClearCookie extends Component {
 		cookies.remove('TOKEN', { path: '/' });
 		cookies.remove('USER_ID', { path: '/' });
 		cookies.remove('USERNAME', { path: '/' });
+		cookies.remove('BASKET_COUNT', { path: '/' });
 		console.log(this.props.location.hash);
 
 		if(this.props.location.hash === '#timeout') {

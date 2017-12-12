@@ -7,6 +7,7 @@ import Footer from '../common/Footer.js'
 import axios from 'axios';
 import Loader from '../common/Loader.js'
 import AddItemForm from '../../forms/AddItemForm.js';
+import Cookies from 'universal-cookie';
 
 class ProductDetails extends Component {
 
@@ -81,7 +82,7 @@ class ProductDetails extends Component {
 	    	quantity : document.getElementById("quantity").value
         });
 	}
-
+	
 	render() {
 		
 		const { quantity} = this.state;
@@ -138,7 +139,6 @@ class ProductDetails extends Component {
 	    return (
 			<div>
 		      <Navbar />
-		      <SearchPanel />
 		      <Loader data={this.state.responseReceived}/>
 		      <div className="details-page">
 			      <div className="container">
