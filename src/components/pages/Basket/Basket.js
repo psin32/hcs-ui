@@ -277,6 +277,11 @@ class Basket extends Component {
 						            <div className="d-flex justify-content-end align-items-center"><span className="h3">Total: &nbsp;</span><strong className="h2 text-primary">£{this.state.basketTotal}</strong></div>
 						         </div>
 						      </div>
+						      <div className="total-price text-right">
+						         <div className="container">
+						        	 <a href="/checkout" className="btn btn-unique">Proceed to Checkout</a>
+						         </div>
+						      </div>
 						   </div>
 						</section>
 					</div>

@@ -16,6 +16,13 @@ class AddItemForm extends Component {
         };
     }
     
+    componentWillMount() {
+		this.setState({
+			quantity : this.props.quantity,
+        	partnumber : this.props.partnumber
+        });		
+    }
+
 	onChange = (e) => {
 	    const state = this.state
 	    state[e.target.name] = e.target.value;
@@ -70,11 +77,13 @@ class AddItemForm extends Component {
 	}
 
 	render() {
+		
+		const {quantity, partnumber} = this.state;
 	    return (
 	    	  <li>
 		          <form id="addtobag-form"  onSubmit={this.onSubmit} className="custom-form form">
-			            <input type="hidden" id="partnumber" name="partnumber" value={this.props.partnumber} />
-			            <input type="hidden" id="quantity" name="quantity" value={this.props.quantity} />
+			            <input type="hidden" id="partnumber" name="partnumber" value={partnumber} />
+			            <input type="hidden" id="quantity" name="quantity" value={quantity} />
 			            <input type="submit" value="Add To Bag" className="btn btn-unique"/>
 			            <Loader data={this.state.responseReceived}/>
 		          </form>

@@ -43,6 +43,9 @@ class RegistrationForm extends Component {
 	    	    "password": password,
 	    	    "profiletype": "C"
 	    	  },
+	    	  "userreg":{
+		    	"password": password
+		      },
 	    	  "address":{
 	    	    "addresstype": "S",
 	    	    "status": "P",
