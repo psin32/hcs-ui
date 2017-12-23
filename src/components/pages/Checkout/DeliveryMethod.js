@@ -53,7 +53,7 @@ class DeliveryMethod extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let getShippingAddressURL = process.env.REACT_APP_ORDER_APP_GET_SHIPPING_ADDRESS_URL;
+	    let getShippingAddressURL = process.env.REACT_APP_USER_APP_GET_SHIPPING_ADDRESS_URL;
 	    
 	    api.get(getShippingAddressURL)
 	    .then((response) => {
@@ -96,7 +96,7 @@ class DeliveryMethod extends Component {
 	handleChange (event) {
 		console.log(event.target.value);
         this.state.data.map((alldata, index) => {
-        	if(alldata.address_id == event.target.value) {
+        	if(alldata.addressId == event.target.value) {
         		this.setAddressData(alldata)
         	}
   	    });
@@ -104,7 +104,7 @@ class DeliveryMethod extends Component {
 	
 	setAddressData(alldata) {
     	const addressdata = {
-    			address_id : alldata.address_id,
+    			address_id : alldata.addressId,
     			title : alldata.title,
     			firstname : alldata.firstname,
     			lastname : alldata.lastname,
@@ -180,7 +180,7 @@ class DeliveryMethod extends Component {
     render() {
 	    const addresses = this.state.data.map((alldata, index) => {
 		      return (
-		    		  <option key={ index } value={ alldata.address_id }>{ alldata.address1 }, { alldata.address2 }, { alldata.city }, { alldata.country }</option>
+		    		  <option key={ index } value={ alldata.addressId } >{ alldata.address1 }, { alldata.address2 }, { alldata.city }, { alldata.country }</option>
 		      );
 		});
 
@@ -188,20 +188,37 @@ class DeliveryMethod extends Component {
 
     	return (
 	         <div className="card-block">
-	         	<form onSubmit={this.props.onSubmit.bind(this)}>
-	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)}>
-	         			{addresses}
+	         	<div className="mb-2"><strong>Select Delivery Address:</strong></div>
+	         	<form onSubmit={(e) => this.props.onSubmit(e, this.state)} id="deliveryMethodForm">
+	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.props.shippingaddress? this.props.shippingaddress.address_id : ''}>
+		     			{addresses}
 					</select>
-					<div className="ml-5 mt-3 mb-5">
-						{title} {firstname} {lastname},<br/>
-						{address1},<br/>
-						{address2},<br/>
-						{address3},<br/>
-						{city},<br/>
-						{zipcode},<br/>
-						{country}
+					<div className="row address-section d-flex">
+						<div className="col col-lg-4 col-md-4 col-sm-12 col-12">
+							<strong>Address:</strong>
+						</div>					
+						<div className="col col-lg-8 col-md-8 col-sm-12 col-12">
+							{title} {firstname} {lastname},<br/>
+							{address1}, {address2} <br/>
+							{city}, {zipcode}, {country}<br/>
+							<a href="#" className="address-link">Edit address</a>
+							<a href="#" className="address-link">Add New</a>
+						</div>
 					</div>
-					<input type="submit" value="Next" className="btn btn-unique mt-3 mb-3"/>
+					<input type="hidden" id="address_id" name="address_id" value={address_id} />
+					<input type="hidden" id="title" name="title" value={title} />
+					<input type="hidden" id="firstname" name="firstname" value={firstname} />
+					<input type="hidden" id="lastname" name="lastname" value={lastname} />
+					<input type="hidden" id="address1" name="address1" value={address1} />
+					<input type="hidden" id="address2" name="address2" value={address2} />
+					<input type="hidden" id="address3" name="address3" value={address3} />
+					<input type="hidden" id="city" name="city" value={city} />
+					<input type="hidden" id="state" name="state" value={state} />
+					<input type="hidden" id="country" name="country" value={country} />
+					<input type="hidden" id="email1" name="email1" value={email1} />
+					<input type="hidden" id="phone1" name="phone1" value={phone1} />
+					<input type="hidden" id="addresstype" name="addresstype" value={addresstype} />
+					<input type="submit" value="Continue to select shipping" className="btn btn-unique mt-3 mb-3"/>
 				</form>
 	         </div>
 	    );

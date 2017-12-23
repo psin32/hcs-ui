@@ -41,11 +41,51 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
 
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -56,8 +96,48 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -79,11 +159,51 @@ transform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
 
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -94,8 +214,48 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -290,6 +450,13 @@ to {
 	.view-basket {
 		display: none;
 	}
+	#deliveryMethodForm select {
+		width: 90%;
+	}
+}
+
+.order-summary-visibility {
+	display: block;
 }
 
 @media ( max-width : 999px) {
@@ -312,6 +479,9 @@ to {
 	.view-basket:hover {
 		background-color: #A9A9A9;
 	}
+	#deliveryMethodForm select {
+		width: 100%;
+	}
 }
 
 .edit-basket {
@@ -328,11 +498,21 @@ to {
 	text-decoration: none;
 }
 
-.edit-basket a{
+.edit-basket a {
 	text-decoration: none;
 	color: #000;
 }
 
 .edit-basket:hover {
 	background-color: #A9A9A9;
+}
+
+.address-link {
+	font-size: 0.8em;
+	margin-right: 10px;
+}
+
+.address-section {
+	font-size: 0.9em;
+	padding-top: 20px;
 }

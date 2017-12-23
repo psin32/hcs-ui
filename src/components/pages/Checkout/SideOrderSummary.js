@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
 import Loader from '../common/Loader.js'
+import jquery from 'jquery';
 
 class SideOrderSummary extends Component {
 
@@ -13,6 +14,8 @@ class SideOrderSummary extends Component {
 		    basketTotal : 0,
 		    emptyBasket : false,
 			responseReceived : false,
+			orderDetailStyle : 'card-block order-details',
+			viewEditBagMessage : 'View Bag'
 		};
 	}
 	
@@ -20,17 +23,17 @@ class SideOrderSummary extends Component {
 	}
 	
 	clickViewBasket(event) {
-		let display = document.getElementById("order-details").style.display;
-		console.log(display);
-		if(display == "none") {
-			document.getElementById("order-details").style.display = "block";
-			document.getElementById("view-basket-button").innerHTML = "Hide Bag";
-		} else if(display == "") {
-			document.getElementById("order-details").style.display = "block";
-			document.getElementById("view-basket-button").innerHTML = "Hide Bag";
-		} else if(display == "block") {
-			document.getElementById("order-details").style.display = "none";
-			document.getElementById("view-basket-button").innerHTML = "View Bag";
+		let orderDetailClass = document.getElementById("order-details").className;
+		if(orderDetailClass ==  "card-block order-details") {
+	        this.setState({
+	        	orderDetailStyle : 'card-block order-summary-visibility',
+	        	viewEditBagMessage : 'Hide Bag'
+	        });
+		} else {
+	        this.setState({
+	        	orderDetailStyle : 'card-block order-details',
+	        	viewEditBagMessage : 'View Bag'
+	        });
 		}
 	}
 
@@ -46,7 +49,7 @@ class SideOrderSummary extends Component {
                      </div>
                      <div className="col-md-5">
                          <span>{ alldata.name }</span><br/>
-                         Quantity : <span>{ alldata.quantity }</span>
+                         <i>Quantity : <span>{ alldata.quantity }</span></i>
                      </div>
                      <div className="col-md-3">
                      	<strong>£{ alldata.itemtotal }</strong>
@@ -61,11 +64,11 @@ class SideOrderSummary extends Component {
 		    		   <div className="card-header">
 		    		      <h5 className="mb-0">
 		    		         <i className="fa fa-shopping-bag order-summary__icon-shopping"></i><span className="order-summary__shopping"> {basketCount} items</span>
-		    		         <button className="view-basket" onClick={this.clickViewBasket.bind(this)} id="view-basket-button">View Bag</button>
+		    		         <button className="view-basket" onClick={this.clickViewBasket.bind(this)} id="view-basket-button">{this.state.viewEditBagMessage}</button>
 		    		         <div className="edit-basket"><a href="/basket">Edit Bag</a></div>
 		    		      </h5>
 		    		   </div>
-		    		   <div className="card-block order-details" id="order-details">
+		    		   <div className={this.state.orderDetailStyle} id="order-details">
 	    		         {items}
 	    		         <div className="summary-section p-3">
 		    		         <div className="summary">

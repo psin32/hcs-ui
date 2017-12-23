@@ -51,7 +51,7 @@ class DeliveryOption extends Component {
 						<input type="radio" name="option" id="home" value="HOME" checked={this.state.option === 'HOME'} onClick={this.onChange} />
 						<label className="ml-2">Home Delivery</label>
 					</div>
-					<input type="submit" value="Next" className="btn btn-unique mt-3 mb-3"/>
+					<input type="submit" value="Continue to select address" className="btn btn-unique mt-3 mb-3"/>
 				</form>
 	         </div>
 	    );

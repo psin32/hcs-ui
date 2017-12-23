@@ -8,6 +8,7 @@ import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import DeliveryOption from './DeliveryOption.js'
 import DeliveryMethod from './DeliveryMethod.js'
+import ShippingMethod from './ShippingMethod.js'
 import SideOrderSummary from './SideOrderSummary.js'
 import jquery from 'jquery';
 
@@ -25,15 +26,22 @@ class Checkout extends Component {
 			shippingcharges : 0,
 			totaldiscount : 0,
 			ordertype : '',
-			showDeliveryOption: true,
+			shippingaddress : '',
 			showDeliveryMethod : false,
+			showShippingMethod : false,
 			showPayment : false,
 			option_href_css : '',
 			method_href_css : 'collapsed disabled-link',
+			shipping_href_css : 'collapsed disabled-link',			
 			payment_href_css : 'collapsed disabled-link',
-			option_div_css : 'collapse show mt-3 ml-5 mr-5',
+			option_div_css : 'collapse show mt-3 ml-3 mr-3',
 			method_div_css : 'collapse mt-3 ml-3 mr-3',
-			payment_div_css : 'collapse'
+			shipping_div_css : 'collapse mt-3 ml-3 mr-3',
+			payment_div_css : 'collapse',
+			option_area_expanded : true,
+			method_area_expanded : false,
+			shipping_area_expanded : false,
+			payment_area_expanded : false
 		};
 		this.onSubmitDeliveryOption = this.onSubmitDeliveryOption.bind(this);
 		this.onSubmitDeliveryMethod = this.onSubmitDeliveryMethod.bind(this);
@@ -63,19 +71,45 @@ class Checkout extends Component {
     			ordertotal : response.data.ordertotal,
     			totaldiscount : response.data.totaldiscount,
     			shippingcharges : response.data.shippingcharges,
-    			ordertype : response.data.ordertype
+    			ordertype : response.data.ordertype,
+    			shippingaddress : response.data.shippingaddress
             });
         	if(this.state.ordertype == 'HOME') {
         		this.setState({
-        			showDeliveryOption: false,
         			showDeliveryMethod: true,
+        			showShippingMethod: false,
         			showPayment: false,
         			option_href_css : 'collapsed',
         			method_href_css : '',
+        			shipping_href_css : 'collapsed disabled-link',
         			payment_href_css : 'collapsed disabled-link',
-    				option_div_css : 'collapse mt-3 ml-5 mr-5',
+    				option_div_css : 'collapse mt-3 ml-3 mr-3',
     				method_div_css : 'collapse show mt-3 ml-3 mr-3',
-    				payment_div_css : 'collapse'
+    				shipping_div_css : 'collapse mt-3 ml-3 mr-3',
+    				payment_div_css : 'collapse',
+    				option_area_expanded : false,
+    				method_area_expanded : true,
+    				shipping_area_expanded : false,
+    				payment_area_expanded : false
+        		});
+        	}
+        	if(this.state.shippingaddress) {
+        		this.setState({
+        			showDeliveryMethod: true,
+        			showShippingMethod: true,
+        			showPayment: false,
+        			option_href_css : 'collapsed',
+        			method_href_css : 'collapsed',
+        			shipping_href_css : '',
+        			payment_href_css : 'collapsed disabled-link',
+    				option_div_css : 'collapse mt-3 ml-3 mr-3',
+    				method_div_css : 'collapse mt-3 ml-3 mr-3',
+    				shipping_div_css : 'collapse show mt-3 ml-3 mr-3',
+    				payment_div_css : 'collapse',
+    				option_area_expanded : false,
+    				method_area_expanded : false,
+    				shipping_area_expanded : true,
+    				payment_area_expanded : false
         		});
         	}
 	    })
@@ -116,15 +150,21 @@ class Checkout extends Component {
 		        });
 		    	if (response.status === 200) {
 					this.setState({
-	        			showDeliveryOption: false,
 	        			showDeliveryMethod: true,
+	        			showShippingMethod: false,
 	        			showPayment: false,
 						option_href_css : 'collapsed',
 						method_href_css : '',
+						shipping_href_css : 'collapsed disabled-link',
 						payment_href_css : 'collapsed disabled-link',
-						option_div_css : 'collapse mt-3 ml-5 mr-5',
+						option_div_css : 'collapse mt-3 ml-3 mr-3',
 						method_div_css : 'collapse show mt-3 ml-3 mr-3',
-						payment_div_css : 'collapse'
+						shipping_div_css : 'collapse mt-3 ml-3 mr-3',
+						payment_div_css : 'collapse',
+						option_area_expanded : false,
+						method_area_expanded : true,
+						shipping_area_expanded : false,
+						payment_area_expanded : false
 			        });
 		    	}
 			})
@@ -148,31 +188,82 @@ class Checkout extends Component {
 		}
 	}
 	
-	onSubmitDeliveryMethod(event) {
+	onSubmitDeliveryMethod(event, formdata) {
 		event.preventDefault();
-		this.setState({
-			showDeliveryOption: false,
-			showDeliveryMethod: true,
-			showPayment: false,
-			option_href_css : 'collapsed',
-			method_href_css : 'collapsed',
-			payment_href_css : '',
-			option_div_css : 'collapse mt-3 ml-5 mr-5',
-			method_div_css : 'collapse mt-3 ml-3 mr-3',
-			payment_div_css : 'collapse show'
-        });
-	}
-	
-	clickDeliveryMethod() {
-		this.setState({
-			showDeliveryMethod: true,
-			option_href_css : 'collapsed',
-			method_href_css : '',
-			payment_href_css : 'collapsed disabled-link',
-			option_div_css : 'collapse mt-3 ml-5 mr-5',
-			method_div_css : 'collapse show mt-3 ml-3 mr-3',
-			payment_div_css : 'collapse'
-		});
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+
+	    const {userId, address_id, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nickname, shipping, billing} = formdata;
+	    
+	    let saveShippingAddressURL = process.env.REACT_APP_ORDER_APP_POST_SAVE_DELIVERY_ADDRESS_URL;
+	    
+	    api.post(saveShippingAddressURL,
+	    	{
+				"address_id": address_id,
+				"addresstype": addresstype,
+				"status": status,
+				"isprimary": isprimary,
+				"selfaddress": selfaddress,
+				"title": title,
+				"firstname": firstname,
+				"lastname": lastname,
+				"email1": email1,
+				"phone1": phone1,
+				"address1": address1,
+				"address2": address2,
+				"address3": address3,
+				"city": city,
+				"state": state,
+				"zipcode": zipcode,
+				"country": country
+	    	}	    		
+		)
+		.then((response) => {
+			this.setState({
+				responseReceived : true
+	        });
+	    	if (response.status === 200) {
+	    		this.setState({
+	    			shippingaddress : response.data.shippingaddress
+	    		});
+				this.setState({
+					showDeliveryMethod: true,
+					showShippingMethod: true,
+					showPayment: false,
+					option_href_css : 'collapsed',
+					method_href_css : 'collapsed',
+					shipping_href_css : '',
+					payment_href_css : 'collapsed',
+					option_div_css : 'collapse mt-3 ml-3 mr-3',
+					method_div_css : 'collapse mt-3 ml-3 mr-3',
+					shipping_div_css : 'collapse show mt-3 ml-3 mr-3',
+					payment_div_css : 'collapse disabled-link',
+					option_area_expanded : false,
+					method_area_expanded : false,
+					shipping_area_expanded : true,
+					payment_area_expanded : false
+		        });
+	    	}
+		})
+		.catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == this.state.token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+		}); 		
 	}
 	
     render() {
@@ -180,7 +271,12 @@ class Checkout extends Component {
 
     	let deliveryMethodComponent = null;
     	if(this.state.showDeliveryMethod) {
-    		deliveryMethodComponent = <DeliveryMethod onSubmit={this.onSubmitDeliveryMethod}/>;
+    		deliveryMethodComponent = <DeliveryMethod onSubmit={this.onSubmitDeliveryMethod} shippingaddress={this.state.shippingaddress}/>;
+    	}
+    	
+    	let shippingMethodComponent = null;
+    	if(this.state.showShippingMethod) {
+    		shippingMethodComponent = <ShippingMethod onSubmit={this.onSubmitDeliveryMethod} shippingaddress={this.state.shippingaddress}/>;
     	}
 
     	let checkoutContent = null;
@@ -192,7 +288,7 @@ class Checkout extends Component {
 			    		<div className="card">
 					      <div className="card-header" role="tab" id="deliveryOption">
 					         <h5 className="mb-0">
-					         	<a className={this.state.option_href_css} data-toggle="collapse" data-parent="#accordion" id="deliveryOption-href" href="#option" aria-expanded="true" aria-controls="option">
+					         	<a className={this.state.option_href_css} data-toggle="collapse" data-parent="#accordion" id="deliveryOption-href" href="#option" aria-expanded={this.state.option_area_expanded} aria-controls="option">
 					         		Delivery Option
 					            </a>
 					         </h5>
@@ -204,8 +300,8 @@ class Checkout extends Component {
 			    		<div className="card">
 					      <div className="card-header" role="tab" id="deliveryMethod">
 					         <h5 className="mb-0">
-					            <a className={this.state.method_href_css} id="deliveryMethod-href" data-toggle="collapse" data-parent="#accordion" href="#method" aria-expanded="false" aria-controls="method" onClick={this.clickDeliveryMethod.bind(this)}>
-					            	Delivery Method
+					            <a className={this.state.method_href_css} id="deliveryMethod-href" data-toggle="collapse" data-parent="#accordion" href="#method" aria-expanded={this.state.method_area_expanded} aria-controls="method">
+					            	Delivery Address
 					            </a>
 					         </h5>
 					      </div>
@@ -213,10 +309,22 @@ class Checkout extends Component {
 					      	{deliveryMethodComponent}
 					      </div>
 					    </div>
-					   <div className="card">
+			    		<div className="card">
+					      <div className="card-header" role="tab" id="shippingMethod">
+					         <h5 className="mb-0">
+					            <a className={this.state.shipping_href_css} id="deliveryMethod-href" data-toggle="collapse" data-parent="#accordion" href="#shipping" aria-expanded={this.state.shipping_area_expanded} aria-controls="shipping">
+					            	Shipping Method
+					            </a>
+					         </h5>
+					      </div>
+			    		  <div id="shipping" className={this.state.shipping_div_css} role="tabpanel" aria-labelledby="shippingMethod">
+					      	{shippingMethodComponent}
+					      </div>
+					    </div>
+					    <div className="card">
 					      <div className="card-header" role="tab" id="paymentSection">
 					         <h5 className="mb-0">
-					            <a className={this.state.payment_href_css} data-toggle="collapse" id="payment-href" data-parent="#accordion" href="#payment" aria-expanded="false" aria-controls="payment">
+					            <a className={this.state.payment_href_css} data-toggle="collapse" id="payment-href" data-parent="#accordion" href="#payment" aria-expanded={this.state.payment_area_expanded} aria-controls="payment">
 					            	Payment
 					            </a>
 					         </h5>
@@ -226,7 +334,7 @@ class Checkout extends Component {
 					            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 					         </div>
 					      </div>
-					   </div>
+					    </div>
 					</div>	
 				</div>    				
     		);
