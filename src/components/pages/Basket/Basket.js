@@ -49,7 +49,7 @@ class Basket extends Component {
 	            });	    	
 	            this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.basketTotal
+	            	basketTotal : response.data.subtotal
 	            });
 	    	}
 	    })
@@ -95,7 +95,7 @@ class Basket extends Component {
 	    	} else {
 				this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.basketTotal,
+	            	basketTotal : response.data.subtotal,
 	            	responseReceived : true
 		        });		
 	    	}
@@ -185,7 +185,7 @@ class Basket extends Component {
 	    	} else {
 				this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.basketTotal,
+	            	basketTotal : response.data.subtotal,
 	            	responseReceived : true
 		        });		
 	    	}

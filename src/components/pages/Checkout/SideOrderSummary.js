@@ -10,16 +10,10 @@ class SideOrderSummary extends Component {
 	constructor() {
 		super();
 		this.state = {
-		    data : [],
-		    basketTotal : 0,
-		    emptyBasket : false,
 			responseReceived : false,
 			orderDetailStyle : 'card-block order-details',
 			viewEditBagMessage : 'View Bag'
 		};
-	}
-	
-	componentWillMount() {
 	}
 	
 	clickViewBasket(event) {
@@ -41,7 +35,7 @@ class SideOrderSummary extends Component {
 		const cookies = new Cookies();
 		const basketCount = cookies.get('BASKET_COUNT');
 
-		const items = this.props.data.map((alldata, index) => {
+		const items = this.props.items.map((alldata, index) => {
 		      return (
                   <div className="summary-content text-left d-flex">
                      <div className="col-md-4">
@@ -76,7 +70,7 @@ class SideOrderSummary extends Component {
 		    		               Subtotal:
 		    		            </div>
 		    		            <div className="summary-right">
-		    		               £{this.props.subtotal}
+		    		               £{this.props.orders.subtotal}
 		    		            </div>
 		    		         </div>
 		    		         <div className="summary">
@@ -84,7 +78,7 @@ class SideOrderSummary extends Component {
 		    		               Shipping:
 		    		            </div>
 		    		            <div className="summary-right">
-		    		               £{this.props.shippingcharges}
+		    		               £{this.props.orders.shippingcharges}
 		    		            </div>
 		    		         </div>
 		    		         <div className="summary">
@@ -92,7 +86,7 @@ class SideOrderSummary extends Component {
 		    		               Order Total:
 		    		            </div>
 		    		            <div className="summary-right">
-		    		               £{this.props.ordertotal}
+		    		               £{this.props.orders.ordertotal}
 		    		            </div>
 		    		         </div>
 	    		         </div>

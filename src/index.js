@@ -14,6 +14,7 @@ import PDP from './components/pages/PDP/ProductDetail.js';
 import Category from './components/pages/Category/Category.js';
 import Basket from './components/pages/Basket/Basket.js';
 import Checkout from './components/pages/Checkout/Checkout.js';
+import OrderConfirmation from './components/pages/Checkout/OrderConfirmation.js';
 
 ReactDOM.render(
 		<BrowserRouter>
@@ -31,6 +32,7 @@ ReactDOM.render(
 					<Route path="/category/:category" component={Category} ></Route>
 					<Route path="/basket" component={Basket} ></Route>
 					<Route path="/checkout" component={Checkout} ></Route>
+					<Route path="/confirmation" component={OrderConfirmation} ></Route>
 					<Route path="*" component={PageNotFound} status={404}/>
 				</Switch>
 			</div>

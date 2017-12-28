@@ -61,6 +61,32 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
@@ -75,7 +101,33 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -116,8 +168,60 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -179,6 +283,32 @@ transform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
@@ -193,7 +323,33 @@ transform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -234,8 +390,60 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -453,6 +661,31 @@ to {
 	#deliveryMethodForm select {
 		width: 90%;
 	}
+	.paypal-logo {
+		width: 200px;
+	}
+	.card-logo {
+		width: 250px;
+	}
+	.card-section {
+		border: 1px solid transparent;
+		border-color: #cacaca;
+		padding-top: 40px;
+		height: 128px;
+		cursor: pointer;
+	}
+	.t-and-c {
+		margin-left: 10px;
+		font-size: 0.9em;
+		margin-top: 20px;
+	}
+	.order-and-shipping {
+		font-size: 0.9em;
+	}
+	.items-ordered {
+		font-size: 0.9em;
+		border-bottom: 1px solid #eee;
+	}
 }
 
 .order-summary-visibility {
@@ -470,8 +703,8 @@ to {
 		border-color: #cacaca;
 		font-weight: normal;
 		border: 1px solid transparent;
-		padding: .5rem .75rem;
-		font-size: 1rem;
+		padding: .3rem .75rem;
+		font-size: 0.8rem;
 		line-height: 1.25;
 		transition: all 0.15s ease-in-out;
 		margin-left: 10px;
@@ -482,6 +715,31 @@ to {
 	#deliveryMethodForm select {
 		width: 100%;
 	}
+	.paypal-logo {
+		width: 100px;
+	}
+	.card-logo {
+		width: 140px;
+	}
+	.card-section {
+		border: 1px solid transparent;
+		border-color: #cacaca;
+		padding-top: 20px;
+		height: 65px;
+		cursor: pointer;
+	}
+	.t-and-c {
+		margin-left: 10px;
+		font-size: 0.8em;
+		margin-top: 20px;
+	}
+	.order-and-shipping {
+		font-size: 0.8em;
+	}
+	.items-ordered {
+		font-size: 0.8em;
+		border-bottom: 1px solid #eee;
+	}
 }
 
 .edit-basket {
@@ -491,8 +749,8 @@ to {
 	border-color: #cacaca;
 	font-weight: normal;
 	border: 1px solid transparent;
-	padding: .5rem .75rem;
-	font-size: 1rem;
+	padding: .3rem .75rem;
+	font-size: 0.8rem;
 	line-height: 1.25;
 	transition: all 0.15s ease-in-out;
 	text-decoration: none;
@@ -515,4 +773,103 @@ to {
 .address-section {
 	font-size: 0.9em;
 	padding-top: 20px;
+}
+
+.edit-checkout-section {
+	float: right;
+	font-size: 0.6em;
+}
+
+.payment-types {
+	text-align: center;
+}
+
+.paypal-section {
+	border: 1px solid transparent;
+	border-color: #cacaca;
+	cursor: pointer;
+}
+
+.section--active {
+	background-color: #F6F9F6;
+}
+
+.paypal-panel {
+	border: 2px solid transparent;
+	border-color: #cacaca;
+	background: #fff;
+}
+
+.paypal-panel:after, .paypal-panel:before {
+	bottom: 100%;
+	left: 23%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.paypal-panel:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #fff;
+	border-width: 13px;
+	margin-left: -13px;
+}
+
+.paypal-panel:before {
+	border-color: rgba(202, 202, 202, 0);
+	border-bottom-color: #cacaca;
+	border-width: 16px;
+	margin-left: -16px;
+}
+
+.card-panel {
+	border: 2px solid transparent;
+	border-color: #cacaca;
+	background: #fff;
+}
+
+.card-panel:after, .card-panel:before {
+	bottom: 100%;
+	left: 75%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.card-panel:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #fff;
+	border-width: 13px;
+	margin-left: -13px;
+}
+
+.card-panel:before {
+	border-color: rgba(202, 202, 202, 0);
+	border-bottom-color: #cacaca;
+	border-width: 16px;
+	margin-left: -16px;
+}
+
+.payment-hidden {
+	display: none;
+}
+
+.selected-option {
+	margin-top: 5px;
+	font-size: 0.8em;
+}
+
+.center {
+	text-align: center;
+}
+
+.order-shipping-header {
+	font-size: 1.2em;
+	line-height: 30px;
 }

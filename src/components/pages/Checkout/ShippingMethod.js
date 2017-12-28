@@ -53,12 +53,11 @@ class ShippingMethod extends Component {
 	}
 	
     render() {
-    	
 	    const shippingMethods = this.state.data.map((alldata, index) => {
 		      return (
 					<div className="radio row address-section d-flex" key={ index }>
 						<div className="col col-lg-8 col-md-8 col-sm-8 col-8">
-							<input type="radio" name="shippingmethod" id={ alldata.name } value={ alldata.name }  onClick={this.onChange} />
+							<input type="radio" name="shippingmethod" id={ alldata.name } value={ alldata.name } checked={alldata.name === this.props.orders.shippingmethod} onClick={this.props.onClick} />
 							<label className="ml-2">{ alldata.description }</label>
 						</div>					
 						<div className="col col-lg-4 col-md-4 col-sm-4 col-4">

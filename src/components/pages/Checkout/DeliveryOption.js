@@ -10,17 +10,13 @@ class DeliveryOption extends Component {
 	constructor() {
 		super();
 		this.state = {
-		    data : [],
-		    basketTotal : 0,
-		    emptyBasket : false,
-			responseReceived : false,
 			option : ''
 		};
 	}
 	
 	componentWillMount() {
         this.setState({
-        	option : this.props.option
+        	option : this.props.orders.ordertype
         });
 	}
 

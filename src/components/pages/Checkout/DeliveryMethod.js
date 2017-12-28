@@ -36,7 +36,8 @@ class DeliveryMethod extends Component {
 			billing : false,
 			noaddress : false,
 			newaddress : false,
-			responseReceived : false
+			responseReceived : false,
+			selectedAddressId : ''
 		};
 	}
 	
@@ -67,7 +68,12 @@ class DeliveryMethod extends Component {
             		newaddress : false
                 });
 	            response.data.map((alldata, index) => {
-	            	if(index == 0) {
+	            	if(this.props.orders.shippingaddress && alldata.addressId == this.props.orders.shippingaddress.address_id) {
+	    				this.setState({
+	    					selectedAddressId : this.props.orders.shippingaddress.address_id
+	    		        });
+	            		this.setAddressData(alldata);
+	            	} else if(index == 0) {
 	            		this.setAddressData(alldata)
 	            	}
 	      	    });
@@ -94,12 +100,14 @@ class DeliveryMethod extends Component {
 	}
 	
 	handleChange (event) {
-		console.log(event.target.value);
         this.state.data.map((alldata, index) => {
         	if(alldata.addressId == event.target.value) {
         		this.setAddressData(alldata)
         	}
   	    });
+		this.setState({
+			selectedAddressId : event.target.value
+        });
     }
 	
 	setAddressData(alldata) {
@@ -178,6 +186,7 @@ class DeliveryMethod extends Component {
 	}
 	
     render() {
+    	
 	    const addresses = this.state.data.map((alldata, index) => {
 		      return (
 		    		  <option key={ index } value={ alldata.addressId } >{ alldata.address1 }, { alldata.address2 }, { alldata.city }, { alldata.country }</option>
@@ -190,7 +199,7 @@ class DeliveryMethod extends Component {
 	         <div className="card-block">
 	         	<div className="mb-2"><strong>Select Delivery Address:</strong></div>
 	         	<form onSubmit={(e) => this.props.onSubmit(e, this.state)} id="deliveryMethodForm">
-	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.props.shippingaddress? this.props.shippingaddress.address_id : ''}>
+	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.state.selectedAddressId}>
 		     			{addresses}
 					</select>
 					<div className="row address-section d-flex">
