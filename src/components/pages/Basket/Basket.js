@@ -218,28 +218,29 @@ class Basket extends Component {
 	    const items = this.state.data.map((alldata, index) => {
 		      return (
 			            <div className="row cart-item">
-			               <div className="col-5">
+			               <div className="col col-lg-5 col-md-5 col-sm-12 col-12">
 			                  <div className="product-overview text-left d-flex">
 			                     <a href={ "/product/"+alldata.url } className="product-img">
 			                     	<img src={ alldata.image }  alt="product" className="thumb" />
 			                     </a>
 			                     <div className="product-details">
 			                        <a href={ "/product/"+alldata.url }>
-			                           <h3 className="h4">{ alldata.name }</h3>
+			                           <h3 className="h4 product-name">{ alldata.name }</h3>
 			                        </a>
 			                     </div>
 			                  </div>
 			               </div>
-			               <div className="col-2"><strong>£{ alldata.listprice }</strong></div>
-			               <div className="col-2">
-			                  <div className="product-quantity d-flex align-items-center justify-content-center">
+			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 hide-basket-item"><strong>£{ alldata.listprice }</strong></div>
+			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12">
+			                  <div className="product-quantity d-flex align-left align-items-center justify-content-center quantity-section">
+			                  	 <span className="quantity-text">Quantity : </span>
 			                     <div className="minus-btn"><i className="icon-android-remove" title={alldata.partnumber} onClick={this.handleQuantityDecrease(index)}></i></div>
 			                     <input type="text" value={ alldata.quantity } id={alldata.partnumber} name={alldata.partnumber} className="quantity" onChange={this.handleQuantityChange(index)}/>
 			                     <div className="plus-btn"><i className="icon-android-add" title={alldata.partnumber} onClick={this.handleQuantityIncrease(index)}></i></div>
 			                  </div>
 			               </div>
-			               <div className="col-2"><strong>£{ alldata.itemtotal }</strong></div>
-			               <div className="col-1"><a href="#"><i className="fa fa-close" title={alldata.partnumber} onClick={this.handleDeleteItem}></i></a></div>
+			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 align-left item-total-section"><span className="item-total-text">Item Total : </span><strong>£{ alldata.itemtotal }</strong></div>
+			               <div className="col col-lg-1 col-md-1 col-sm-12 col-12 align-left basket-remove-section"><a href="#"><span className="basket-remove-text" title={alldata.partnumber} onClick={this.handleDeleteItem}>Remove Item</span><i className="fa fa-close hide-basket-item" title={alldata.partnumber} onClick={this.handleDeleteItem}></i></a></div>
 			            </div>		    		  
 		      );
 		});
@@ -258,7 +259,7 @@ class Basket extends Component {
 						</div>
 						<section className="cart">
 						   <div className="container">
-						      <div className="cart-holder">
+						      <div>
 						         <div className="cart-heading text-center">
 						            <div className="row">
 						               <div className="col-5 text-left">Product</div>

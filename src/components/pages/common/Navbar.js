@@ -12,6 +12,13 @@ class Navbar extends Component {
 	}
 	
 	componentDidMount() {
+		const cookies = new Cookies();
+		const basketCount = cookies.get('BASKET_COUNT');
+		
+		if(!basketCount) {
+			cookies.set('BASKET_COUNT', '0')
+		}
+
 	    const api = axios.create({
 	    	withCredentials: true
 	    });
@@ -39,6 +46,7 @@ class Navbar extends Component {
 		const tokenCookie = cookies.get('TOKEN');
 		const name = cookies.get('USERNAME');
 		const basketCount = cookies.get('BASKET_COUNT');
+		
 	    const categories = this.state.data.map((alldata, index) => {
 		      return (
 		    		<li className="list-inline-item"><a href={"/category/"+alldata.url } className="nav-link">{alldata.description.name}</a></li>

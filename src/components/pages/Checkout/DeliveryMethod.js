@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
 import Loader from '../common/Loader.js'
+import AddEditAddress from './AddEditAddress.js'
 
 class DeliveryMethod extends Component {
 
@@ -20,10 +21,10 @@ class DeliveryMethod extends Component {
 			address3 : "",
 			city : "",
 			state : "",
-			country : "United Kingdom",
+			country : "",
 			zipcode : "",
 			phone1 : "",
-			addresstype : "SB",
+			addresstype : "",
 			isprimary : 0,
 			selfaddress : 0,
 			status : "",
@@ -39,13 +40,15 @@ class DeliveryMethod extends Component {
 			responseReceived : false,
 			selectedAddressId : ''
 		};
+		this.onClickCancel = this.onClickCancel.bind(this);
+		this.fetchAllShippingAddresses = this.fetchAllShippingAddresses.bind(this);
 	}
 	
 	componentWillMount() {
 		this.fetchAllShippingAddresses();
 	}
 	
-	fetchAllShippingAddresses() {
+	fetchAllShippingAddresses(addressId) {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
 
@@ -65,10 +68,16 @@ class DeliveryMethod extends Component {
             if(response.data.length > 0) {
             	this.setState({
             		noaddress : false,
-            		newaddress : false
+            		newaddress : false,
+            		addeditaddress : false
                 });
 	            response.data.map((alldata, index) => {
-	            	if(this.props.orders.shippingaddress && alldata.addressId == this.props.orders.shippingaddress.address_id) {
+	            	if(addressId && alldata.addressId == addressId) {
+	    				this.setState({
+	    					selectedAddressId : addressId
+	    		        });
+	            		this.setAddressData(alldata);
+	            	} else if(this.props.orders.shippingaddress && alldata.addressId == this.props.orders.shippingaddress.address_id) {
 	    				this.setState({
 	    					selectedAddressId : this.props.orders.shippingaddress.address_id
 	    		        });
@@ -79,7 +88,9 @@ class DeliveryMethod extends Component {
 	      	    });
             } else {
             	this.setState({
-            		noaddress : true
+            		noaddress : true,
+            		newaddress : true,
+            		addeditaddress : true
                 });
             }
 	    })
@@ -185,6 +196,27 @@ class DeliveryMethod extends Component {
         });
 	}
 	
+	onClickAddAddress() {
+        this.setState({
+        	addeditaddress : true,
+        	newaddress : true
+        });		
+	}
+
+	onClickEditAddress() {
+        this.setState({
+        	addeditaddress : true,
+        	newaddress : false
+        });	
+	}
+
+	onClickCancel() {
+        this.setState({
+        	addeditaddress : false,
+        	newaddress : false
+        });		
+	}
+	
     render() {
     	
 	    const addresses = this.state.data.map((alldata, index) => {
@@ -195,10 +227,11 @@ class DeliveryMethod extends Component {
 
 	    const {userId, address_id, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nickname, shipping, billing} = this.state;
 
-    	return (
-	         <div className="card-block">
-	         	<div className="mb-2"><strong>Select Delivery Address:</strong></div>
-	         	<form onSubmit={(e) => this.props.onSubmit(e, this.state)} id="deliveryMethodForm">
+	    let deliveryAddressSection = <AddEditAddress cancel={this.onClickCancel} address={this.state} newaddress={this.state.newaddress} fetchAddresses={this.fetchAllShippingAddresses}/>;
+	    if(!this.state.addeditaddress) {
+	    	deliveryAddressSection = (
+    			<form onSubmit={(e) => this.props.onSubmit(e, this.state)} id="deliveryMethodForm">
+	         		<div className="mb-2"><strong>Select Delivery Address:</strong></div>
 	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.state.selectedAddressId}>
 		     			{addresses}
 					</select>
@@ -210,8 +243,8 @@ class DeliveryMethod extends Component {
 							{title} {firstname} {lastname},<br/>
 							{address1}, {address2} <br/>
 							{city}, {zipcode}, {country}<br/>
-							<a href="#" className="address-link">Edit address</a>
-							<a href="#" className="address-link">Add New</a>
+							<a href="#" className="address-link" onClick={this.onClickEditAddress.bind(this)}>Edit address</a>
+							<a href="#" className="address-link" onClick={this.onClickAddAddress.bind(this)}>Add New</a>
 						</div>
 					</div>
 					<input type="hidden" id="address_id" name="address_id" value={address_id} />
@@ -229,6 +262,11 @@ class DeliveryMethod extends Component {
 					<input type="hidden" id="addresstype" name="addresstype" value={addresstype} />
 					<input type="submit" value="Continue to select shipping" className="btn btn-unique mt-3 mb-3"/>
 				</form>
+	    	);
+	    }
+    	return (
+	         <div className="card-block">
+	         	{deliveryAddressSection}
 	         </div>
 	    );
     }

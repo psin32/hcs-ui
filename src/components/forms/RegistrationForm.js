@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Cookies from 'universal-cookie';
 import {withRouter} from "react-router-dom";
 
 class RegistrationForm extends Component {
@@ -24,8 +23,6 @@ class RegistrationForm extends Component {
 	}
 
 	onSubmit = (e) => {
-		const cookies = new Cookies();
-		console.log(cookies.get('TOKEN')); // Pacman
 	    e.preventDefault();
 	    const { title, firstname, lastname, email, password, confirmpassword } = this.state;
 

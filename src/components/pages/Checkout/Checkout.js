@@ -523,7 +523,7 @@ class Checkout extends Component {
 					         </h5>
 					      </div>
 					      <div id="payment" className={this.state.payment_div_css} role="tabpanel" aria-labelledby="headerThree">
-					         <Payment />
+					         <Payment orders={this.state.orders}/>
 					      </div>
 					    </div>
 					</div>	

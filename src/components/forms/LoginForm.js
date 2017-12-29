@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {withRouter} from "react-router-dom";
 import Loader from '../pages/common/Loader.js'
+import Cookies from 'universal-cookie';
 
 class LoginForm extends Component {
 	
@@ -45,7 +46,7 @@ class LoginForm extends Component {
 				responseReceived : true
 	        });		
 	    	if (response.status === 200) {
-	    		this.props.history.push("/myaccount#details");
+	    		this.fetchBasket();
 	    	}
 	    })
 	    .catch((error) => {
@@ -58,6 +59,41 @@ class LoginForm extends Component {
 		    	}
 	    	}
 	    }); 
+	}
+	
+	fetchBasket() {
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+	    
+	    let basketURL = process.env.REACT_APP_BASKET_APP_GET_CURRENT_BASKET_URL;
+	    
+	    api.get(basketURL)
+	    .then((response) => {
+	    	if(response.data.items != null) {
+	    		this.props.history.push("/basket");
+	    	} else {
+	    		this.props.history.push("/myaccount#details");
+	    	}
+	    })
+	    .catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+	    });
 	}
 
 	render() {

@@ -122,11 +122,71 @@ class Payment extends Component {
 								<input type="checkbox" ref="tandc" name="tandc" onChange={this.onChange}/>
 								<label className="t-and-c">I accept the Terms and Conditions of use.</label>
 							</div>
-							<input type="submit" value="Place Order" className="btn btn-unique mt-3 mb-3"/>
+	                        <div className="m-3">
+	                            <button id="payment-button" type="submit" className="btn btn-unique btn-lg btn-info">
+	                                <i className="fa fa-lock fa-lg"></i>&nbsp;
+	                                <span id="payment-button-amount">Pay £{this.props.orders.ordertotal}</span>
+	                            </button>
+	                        </div>
 						</form>
 					</div>					
 					<div className={this.state.cardSection}>
-						tab2
+						<div className="container-fluid py-3">
+						    <div className="row">
+						        <div className="col-12 col-sm-12 col-md-12 col-lg-12 mx-auto text-left">
+						            <div id="pay-invoice" className="card">
+						                <div className="card-body">
+						                    <form action="" method="post" novalidate="novalidate">
+						                        <div className="form-group text-center">
+						                            <ul className="list-inline">
+						                                <li className="list-inline-item"><i className="text-muted fa fa-cc-visa fa-2x"></i></li>
+						                                <li className="list-inline-item"><i className="fa fa-cc-mastercard fa-2x"></i></li>
+						                                <li className="list-inline-item"><i className="fa fa-cc-amex fa-2x"></i></li>
+						                                <li className="list-inline-item"><i className="fa fa-cc-discover fa-2x"></i></li>
+						                            </ul>
+						                        </div>
+						                        <div className="form-group has-success">
+						                            <label for="cc-name" className="control-label mb-1">Name on card</label>
+						                            <input id="cc-name" name="cc-name" type="text" className="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" />
+						                            <span className="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+						                        </div>
+						                        <div className="form-group">
+						                            <label for="cc-number" className="control-label mb-1">Card number</label>
+						                            <input id="cc-number" name="cc-number" type="tel" className="form-control cc-number identified visa" value="" data-val="true" data-val-required="Please enter the card number" data-val-cc-number="Please enter a valid card number" autocomplete="cc-number" />
+						                            <span className="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+						                        </div>
+						                        <div className="row">
+						                            <div className="col-6">
+						                                <div className="form-group">
+						                                    <label for="cc-exp" className="control-label mb-1">Expiration</label>
+						                                    <input id="cc-exp" name="cc-exp" type="tel" className="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="MM / YY" autocomplete="cc-exp" />
+						                                    <span className="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
+						                                </div>
+						                            </div>
+						                            <div className="col-6">
+						                                <label for="x_card_code" className="control-label mb-1">CVV</label>
+						                                <div className="input-group">
+						                                    <input id="x_card_code" name="x_card_code" type="tel" className="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" />
+						                                    <div className="input-group-addon">
+						                                        <span className="fa fa-question-circle fa-lg" data-toggle="popover" data-container="body" data-html="true" data-title="Security Code" 
+						                                        data-content="<div className='text-center one-card'>The 3 digit code on back of the card..<div className='visa-mc-cvc-preview'></div></div>"
+						                                        data-trigger="hover"></span>
+						                                    </div>
+						                                </div>
+						                            </div>
+						                        </div>
+						                        <div style={{textAlign : "center"}}>
+						                            <button id="payment-button" type="submit" className="btn btn-unique btn-lg btn-info">
+						                                <i className="fa fa-lock fa-lg"></i>&nbsp;
+						                                <span id="payment-button-amount">Pay £{this.props.orders.ordertotal}</span>
+						                            </button>
+						                        </div>
+						                    </form>
+						                </div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
 					</div>
 	            </div>	            
 	         </div>

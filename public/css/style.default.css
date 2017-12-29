@@ -1677,7 +1677,8 @@ section.cart .cart-body .cart-item {
 }
 
 section.cart .product-details {
-	padding: 0 20px
+	padding: 0 20px;
+	margin: auto;
 }
 
 section.cart .product-details h3 {

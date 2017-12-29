@@ -52,6 +52,11 @@ class SideOrderSummary extends Component {
 		      );
 		});
 		
+		let shipping = <div className="summary-right">Not Selected</div>;
+		if(this.props.orders.shippingcharges) {
+			shipping = <div className="summary-right">£{this.props.orders.shippingcharges}</div>;
+		}
+		
 	    return (
 	    		<div className="col col-lg-4 col-md-12 col-sm-12 col-12 side-order-summary">
 		    		<div className="card">
@@ -77,9 +82,7 @@ class SideOrderSummary extends Component {
 		    		            <div className="summary-left">
 		    		               Shipping:
 		    		            </div>
-		    		            <div className="summary-right">
-		    		               £{this.props.orders.shippingcharges}
-		    		            </div>
+		    		            {shipping}
 		    		         </div>
 		    		         <div className="summary">
 		    		            <div className="summary-left">

@@ -404,6 +404,12 @@ class Myaddress extends Component {
 						</div>
 						<div className="col-md-6">
 							<div className="form-group">
+								<label for="account-company">Mobile number</label>
+								<input className="form-control" type="text" id="phone1" name="phone1" value={phone1} onChange={this.onChange}/>
+							</div>
+						</div>
+						<div className="col-md-6">
+							<div className="form-group">
 								<label for="account-company">Address Line 1</label>
 								<input className="form-control" type="text" id="line1" name="address1" value={address1} onChange={this.onChange}/>
 							</div>
@@ -422,7 +428,7 @@ class Myaddress extends Component {
 						</div>
 						<div className="col-md-6">
 							<div className="form-group">
-								<label for="account-company">city</label>
+								<label for="account-company">City</label>
 								<input className="form-control" type="text" id="city" name="city" value={city} onChange={this.onChange}/>
 							</div>
 						</div>
