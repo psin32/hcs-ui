@@ -49,7 +49,7 @@ class Basket extends Component {
 	            });	    	
 	            this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.subtotal
+	            	basketTotal : response.data.formattedSubtotal
 	            });
 	    	}
 	    })
@@ -95,7 +95,7 @@ class Basket extends Component {
 	    	} else {
 				this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.subtotal,
+	            	basketTotal : response.data.formattedSubtotal,
 	            	responseReceived : true
 		        });		
 	    	}
@@ -185,7 +185,7 @@ class Basket extends Component {
 	    	} else {
 				this.setState({
 	            	data : response.data.items,
-	            	basketTotal : response.data.subtotal,
+	            	basketTotal : response.data.formattedSubtotal,
 	            	responseReceived : true
 		        });		
 	    	}
@@ -230,7 +230,7 @@ class Basket extends Component {
 			                     </div>
 			                  </div>
 			               </div>
-			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 hide-basket-item"><strong>£{ alldata.listprice }</strong></div>
+			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 hide-basket-item"><strong>£{ alldata.formattedListprice }</strong></div>
 			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12">
 			                  <div className="product-quantity d-flex align-left align-items-center justify-content-center quantity-section">
 			                  	 <span className="quantity-text">Quantity : </span>
@@ -239,7 +239,7 @@ class Basket extends Component {
 			                     <div className="plus-btn"><i className="icon-android-add" title={alldata.partnumber} onClick={this.handleQuantityIncrease(index)}></i></div>
 			                  </div>
 			               </div>
-			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 align-left item-total-section"><span className="item-total-text">Item Total : </span><strong>£{ alldata.itemtotal }</strong></div>
+			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 align-left item-total-section"><span className="item-total-text">Item Total : </span><strong>£{ alldata.formattedItemtotal }</strong></div>
 			               <div className="col col-lg-1 col-md-1 col-sm-12 col-12 align-left basket-remove-section"><a href="#"><span className="basket-remove-text" title={alldata.partnumber} onClick={this.handleDeleteItem}>Remove Item</span><i className="fa fa-close hide-basket-item" title={alldata.partnumber} onClick={this.handleDeleteItem}></i></a></div>
 			            </div>		    		  
 		      );
@@ -250,7 +250,7 @@ class Basket extends Component {
 					<Navbar />
 					<SearchPanel />
 					<div className="cart-page">
-						<Loader data={this.state.responseReceived}/>
+						<Loader data={this.state.responseReceived} fullscreen="true"/>
 						<div className="container">
 							<ol className="breadcrumb">
 							<li className="breadcrumb-item text-uppercase"> <a href="/" className="text-primary">Home</a></li>

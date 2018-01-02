@@ -32,7 +32,9 @@ class AddItemForm extends Component {
 	onSubmit = (e) => {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
-
+		let loadingText = jquery("#load").attr("data-loading-text");
+		let buttonDefaultValue = jquery("#load").html();
+		jquery("#load").html(loadingText);
 		this.setState({
 			responseReceived : false,
         	responseok : false
@@ -63,8 +65,10 @@ class AddItemForm extends Component {
 	    		const basketCount = cookies.get('BASKET_COUNT');
 	    		document.getElementById("basketCount").innerText = basketCount;
 	    	}
+	    	jquery("#load").html(buttonDefaultValue);
 	    })
 	    .catch((error) => {
+	    	jquery("#load").html(buttonDefaultValue);
 			this.setState({
 				responseReceived : true
 	        });		
@@ -84,8 +88,7 @@ class AddItemForm extends Component {
 		          <form id="addtobag-form"  onSubmit={this.onSubmit} className="custom-form form">
 			            <input type="hidden" id="partnumber" name="partnumber" value={partnumber} />
 			            <input type="hidden" id="quantity" name="quantity" value={quantity} />
-			            <input type="submit" value="Add To Bag" className="btn btn-unique"/>
-			            <Loader data={this.state.responseReceived}/>
+			            <button type="submit" className="btn btn-unique" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Adding item...">Add To Bag</button>
 		          </form>
 			      <p className="cart-feedback success" style= {{display: 'none'}} id="successmessage">
 			      	<i className="fa fa-check"></i> 

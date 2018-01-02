@@ -45,8 +45,8 @@ class SideOrderSummary extends Component {
                          <span>{ alldata.name }</span><br/>
                          <i>Quantity : <span>{ alldata.quantity }</span></i>
                      </div>
-                     <div className="col-md-3">
-                     	<strong>£{ alldata.itemtotal }</strong>
+                     <div className="col-md-3 itemtotal-price">
+                     	<strong>£{ alldata.formattedItemtotal }</strong>
                      </div>
                   </div>
 		      );
@@ -75,7 +75,7 @@ class SideOrderSummary extends Component {
 		    		               Subtotal:
 		    		            </div>
 		    		            <div className="summary-right">
-		    		               £{this.props.orders.subtotal}
+		    		               £{this.props.orders.formattedSubtotal}
 		    		            </div>
 		    		         </div>
 		    		         <div className="summary">
@@ -89,7 +89,7 @@ class SideOrderSummary extends Component {
 		    		               Order Total:
 		    		            </div>
 		    		            <div className="summary-right">
-		    		               £{this.props.orders.ordertotal}
+		    		               £{this.props.orders.formattedOrdertotal}
 		    		            </div>
 		    		         </div>
 	    		         </div>

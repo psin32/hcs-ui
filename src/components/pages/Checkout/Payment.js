@@ -96,7 +96,7 @@ class Payment extends Component {
     render() {
 	    return (
 	         <div className="card-block">
-	         	<Loader data={this.state.responseReceived}/>
+	         	<Loader data={this.state.responseReceived} fullscreen="true"/>
 	         	<div className="m-2"><strong>Select Payment option below:</strong></div>
 	         	<div className="row d-flex payment-types p-2">
 					<div className="col col-lg-6 col-md-6 col-sm-6 col-6" onClick={this.onClickPaypalSection.bind(this)}>

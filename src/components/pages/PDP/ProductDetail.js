@@ -19,7 +19,8 @@ class ProductDetails extends Component {
 		    fullimagedata : [],
 		    categoriesdata : [],
 		    listpricedata : [],
-		    primarycategory : "",
+		    primarycategoryname : "",
+		    primarycategoryurl : "",
 		    responseok : false,
 		    pagenotfound : false,
 		    responseReceived : false,
@@ -51,7 +52,8 @@ class ProductDetails extends Component {
             response.data.categories.map((alldata, index) => {
             	if(index == 0) {
     	            this.setState({
-    	            	primarycategory : alldata.identifier
+    	            	primarycategoryname : alldata.name,
+    	            	primarycategoryurl : alldata.url
     	            });
             	}
       	    });               
@@ -94,7 +96,7 @@ class ProductDetails extends Component {
 		
 	    const price = this.state.listpricedata.map((alldata, index) => {
 		      return (
-	    		  <div className="price d-flex justify-content-between align-items-center text-primary">${alldata.price}
+	    		  <div className="price d-flex justify-content-between align-items-center text-primary">${alldata.formattedPrice}
 	                <div className="d-flex justify-content-center">
 	                  <ul className="rate list-inline">
 	                    <li className="list-inline-item"><i className="fa fa-star-o"></i></li>
@@ -108,7 +110,7 @@ class ProductDetails extends Component {
 		      );
 		});
 		
-		const primarycategory = <a href={"/category/" + this.state.primarycategory.toString().replace(" ", "-")} className="text-primary">{ this.state.primarycategory}</a>;
+		const primarycategory = <a href={"/category/" + this.state.primarycategoryurl} className="text-primary">{ this.state.primarycategoryname}</a>;
 		
 		let pagenotfound = null;
 	    if(this.state.pagenotfound) {
@@ -139,7 +141,7 @@ class ProductDetails extends Component {
 	    return (
 			<div>
 		      <Navbar />
-		      <Loader data={this.state.responseReceived}/>
+		      <Loader data={this.state.responseReceived} fullscreen="true"/>
 		      <div className="details-page">
 			      <div className="container">
 			        <ol className="breadcrumb">

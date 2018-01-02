@@ -167,13 +167,17 @@ class Checkout extends Component {
 
 		    let deliveryOptionURL = process.env.REACT_APP_ORDER_APP_POST_DELIVERY_OPTION;
 		    
-		    api.get(deliveryOptionURL+option
+		    api.post(deliveryOptionURL+option
 			)
 			.then((response) => {
 				this.setState({
 					responseReceived : true
 		        });
 		    	if (response.status === 200) {
+		    		this.setState({
+		    			orders : response.data
+		    		});
+		    		
 		    		if(option == 'HOME') {
 						this.setState({
 		        			showDeliveryMethod: true,
@@ -312,7 +316,7 @@ class Checkout extends Component {
 
 	    let saveShippingMethodURL = process.env.REACT_APP_ORDER_APP_GET_SAVE_SHIPPING_METHOD_URL;
 	    
-	    api.get(saveShippingMethodURL+shippingmethod)
+	    api.post(saveShippingMethodURL+shippingmethod)
 		.then((response) => {
 			this.setState({
 				responseReceived : true

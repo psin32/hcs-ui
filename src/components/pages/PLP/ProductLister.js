@@ -31,7 +31,7 @@ class ProductLister extends Component {
 								</ul>
 								<p>{alldata.description.shortdescription}</p>
 								<ul class="price list-inline">
-									<li class="list-inline-item"> <span class="price">£{alldata.listprice[0].price}</span></li>
+									<li class="list-inline-item"> <span class="price">£{alldata.listprice[0].formattedPrice}</span></li>
 								</ul>
 							</div>
 						</div>
