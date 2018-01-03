@@ -38,14 +38,36 @@ class DeliveryMethod extends Component {
 			noaddress : false,
 			newaddress : false,
 			responseReceived : false,
-			selectedAddressId : ''
+			selectedAddressId : '',
+			isGuestUser : false
 		};
 		this.onClickCancel = this.onClickCancel.bind(this);
 		this.fetchAllShippingAddresses = this.fetchAllShippingAddresses.bind(this);
+		this.onSubmitGuestAddress = this.onSubmitGuestAddress.bind(this);
 	}
 	
 	componentWillMount() {
-		this.fetchAllShippingAddresses();
+		const cookies = new Cookies();
+		const registerType = cookies.get('REGISTER_TYPE');
+		if(registerType == 'G') {
+            this.setState({
+            	isGuestUser : true
+            });
+            if(!this.props.orders.shippingaddress) {
+            	this.setState({
+            		noaddress : true,
+            		newaddress : true,
+            		addeditaddress : true
+                });
+            } else {
+            	this.setAddressData(this.props.orders.shippingaddress);
+            }
+		} else {
+            this.setState({
+            	isGuestUser : false
+            });
+			this.fetchAllShippingAddresses();	
+		}
 	}
 	
 	fetchAllShippingAddresses(addressId) {
@@ -217,6 +239,10 @@ class DeliveryMethod extends Component {
         });		
 	}
 	
+	onSubmitGuestAddress(event, formdata) {
+		this.props.onSubmit(event, formdata);
+	}
+	
     render() {
     	
 	    const addresses = this.state.data.map((alldata, index) => {
@@ -227,14 +253,18 @@ class DeliveryMethod extends Component {
 
 	    const {userId, address_id, title, firstname, lastname, email1, address1, address2, address3, city, state, country, zipcode, phone1, addresstype, isprimary, selfaddress, status, email2, phone2, nickname, shipping, billing} = this.state;
 
-	    let deliveryAddressSection = <AddEditAddress cancel={this.onClickCancel} address={this.state} newaddress={this.state.newaddress} fetchAddresses={this.fetchAllShippingAddresses}/>;
+	    let deliveryAddressSection = <AddEditAddress cancel={this.onClickCancel} address={this.state} newaddress={this.state.newaddress} fetchAddresses={this.fetchAllShippingAddresses} guestAddress={this.onSubmitGuestAddress}/>;
 	    if(!this.state.addeditaddress) {
 	    	deliveryAddressSection = (
     			<form onSubmit={(e) => this.props.onSubmit(e, this.state)} id="deliveryMethodForm">
-	         		<div className="mb-2"><strong>Select Delivery Address:</strong></div>
-	         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.state.selectedAddressId}>
-		     			{addresses}
-					</select>
+    				{this.state.isGuestUser ? null :
+    					<div className="mb-2"><strong>Select Delivery Address:</strong></div>
+    				}
+	         		{this.state.isGuestUser ? null :
+		         		<select className="form-control" id="account-country" onChange={this.handleChange.bind(this)} value={this.state.selectedAddressId}>
+			     			{addresses}
+						</select>
+	         		}
 					<div className="row address-section d-flex">
 						<div className="col col-lg-4 col-md-4 col-sm-12 col-12">
 							<strong>Address:</strong>
@@ -244,7 +274,9 @@ class DeliveryMethod extends Component {
 							{address1}, {address2} <br/>
 							{city}, {zipcode}, {country}<br/>
 							<a href="#" className="address-link" onClick={this.onClickEditAddress.bind(this)}>Edit address</a>
-							<a href="#" className="address-link" onClick={this.onClickAddAddress.bind(this)}>Add New</a>
+							{this.state.isGuestUser ? null :
+								<a href="#" className="address-link" onClick={this.onClickAddAddress.bind(this)}>Add New</a>
+							}
 						</div>
 					</div>
 					<input type="hidden" id="address_id" name="address_id" value={address_id} />

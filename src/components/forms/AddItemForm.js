@@ -38,14 +38,21 @@ class AddItemForm extends Component {
 		this.setState({
 			responseReceived : false,
         	responseok : false
-        });		
+        });
 	    e.preventDefault();
 	    const { partnumber, quantity} = this.state;
 
-	    const api = axios.create({
-	    	headers: {'Authorization': 'Bearer '+token},
-	    	withCredentials: true
-	    });
+	    let api = null;
+	    if(token) {
+		    api = axios.create({
+		    	headers: {'Authorization': 'Bearer '+token},
+		    	withCredentials: true
+		    });
+	    } else {
+		    api = axios.create({
+		    	withCredentials: true
+		    });
+	    }
 	    
 	    let addItemURL = process.env.REACT_APP_BASKET_APP_ADD_ITEM_URL;
 	    

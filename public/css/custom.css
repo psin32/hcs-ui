@@ -612,3 +612,8 @@ to {
 .itemtotal-price {
 	font-size: 0.8em;
 }
+
+.order-details-link {
+	text-decoration: underline;
+	color: #ff6b6b;
+}

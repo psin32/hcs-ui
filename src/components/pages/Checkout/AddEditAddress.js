@@ -36,17 +36,29 @@ class AddAddress extends Component {
 			billing : false,
 			noaddress : false,
 			newaddress : false,
-			responseReceived : false
+			responseReceived : false,
+			isGuestUser : false
 		};
 	}
 	
 	componentWillMount() {
 		if(this.props.newaddress) {
-			this.fetchSelfAddress();
+			const cookies = new Cookies();
+			const registerType = cookies.get('REGISTER_TYPE');
+			if(registerType == 'G') {
+	            this.setState({
+	            	isGuestUser : true
+	            });
+			} else {
+				this.fetchSelfAddress();
+			}
 		} else {
 			const state = this.props.address;
 			this.setState(state);
 		}
+		this.setState({
+			noaddress : this.props.address.noaddress
+        });
 	}
 
 	fetchSelfAddress() {
@@ -181,9 +193,11 @@ class AddAddress extends Component {
     	
 	    let	formButton = (
 		    	<div>
-					<div style={{width: "50%", float : "left"}}>
-						<a href="#" className="btn btn-secondary" onClick={this.props.cancel}>Cancel</a>
-					</div>
+		    		{this.state.noaddress || this.state.isGuestUser ? null :
+						<div style={{width: "50%", float : "left"}}>
+							<a href="#" className="btn btn-secondary" onClick={this.props.cancel}>Cancel</a>
+						</div>
+		    		}
 					<div className="text-right">
 						<input type="hidden" id="addressId" name="addressId" value={address_id} />
 						<input type="submit" value="Save" className="btn btn-primary" />
@@ -192,7 +206,7 @@ class AddAddress extends Component {
 		);	    	
 	    
 	    return (
-			<form className="row" onSubmit={this.onSubmit}>
+			<form className="row" onSubmit={(e) => {this.state.isGuestUser ? this.props.guestAddress(e, this.state) : this.onSubmit}}>
 				<div className="col-md-6">
 					<div className="form-group">
 						<label for="account-company">Title</label>

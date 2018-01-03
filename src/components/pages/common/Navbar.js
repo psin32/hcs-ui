@@ -46,6 +46,12 @@ class Navbar extends Component {
 		const tokenCookie = cookies.get('TOKEN');
 		const name = cookies.get('USERNAME');
 		const basketCount = cookies.get('BASKET_COUNT');
+		const registerType = cookies.get('REGISTER_TYPE');
+		
+		let register = true;
+		if(registerType == "G") {
+			register = false;
+		}
 		
 	    const categories = this.state.data.map((alldata, index) => {
 		      return (
@@ -62,12 +68,12 @@ class Navbar extends Component {
 	    	            
 	    	            {categories}
 	    	            
-	    	            {tokenCookie ? (
+	    	            {tokenCookie && register ? (
 	    	    	            <li className="nav-item"><a id="navbarDropdown2" data-target="#" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">Welcome {name}<i className="fa fa-caret-down"></i></a>
 	    	    	              <ul aria-labelledby="navbarDropdown2" className="dropdown-menu">
 	    	    	              	<li><a href="/myaccount#details" className="dropdown-item">My Details</a></li>
 	    	    	                <li><a href="/myaccount#address" className="dropdown-item">My Addresses</a></li>
-	    	    	                <li><a href="/myaccount" className="dropdown-item">Your Orders</a></li>
+	    	    	                <li><a href="/myaccount#orders" className="dropdown-item">Your Orders</a></li>
 	    	    	                <li><a href="/myaccount" className="dropdown-item">Credit & debit cards</a></li>
 	    	    	                <li><a href="/clearcookie#logout" className="dropdown-item"><b>Log out</b></a></li>
 	    	    	              </ul>
