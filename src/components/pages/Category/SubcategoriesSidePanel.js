@@ -12,7 +12,7 @@ class SubcategoriesSidePanel extends Component {
 	render() {
 	    const subcategories = this.props.data.map((alldata, index) => {
 		      return (
-		    		  <li key={ index }><a href={ alldata.url }>{ alldata.description.name }</a></li>
+		    		  <li key={ index }><a href={ alldata.url }>{ alldata.name }</a></li>
 		      );
 		});
 

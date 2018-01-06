@@ -7,6 +7,7 @@ import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import EmptyBasket from './EmptyBasket.js';
+import Topbar from '../common/Topbar.js'
 
 class Basket extends Component {
 
@@ -16,17 +17,30 @@ class Basket extends Component {
 		    data : [],
 		    basketTotal : 0,
 		    emptyBasket : false,
-			responseReceived : false
+			responseReceived : false,
+			proceedButtonLink : '/checkout'
 		};
 	}
 	
 	componentWillMount() {
 		this.fetchBasket();
+		document.title = 'Basket';
 	}
 
 	fetchBasket() {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
+		
+		const registerType = cookies.get('REGISTER_TYPE');
+		if(registerType == 'G') {
+            this.setState({
+            	proceedButtonLink : '/checkoutlogin'
+            });	    	
+		} else {
+            this.setState({
+            	proceedButtonLink : '/checkout'
+            });	    	
+		}
 
 	    const api = axios.create({
 	    	headers: {'Authorization': 'Bearer '+token},
@@ -247,6 +261,7 @@ class Basket extends Component {
 
 	    return (
 				<div>
+				   	<Topbar />
 					<Navbar />
 					<SearchPanel />
 					<div className="cart-page">
@@ -280,7 +295,7 @@ class Basket extends Component {
 						      </div>
 						      <div className="total-price text-right">
 						         <div className="container">
-						        	 <a href="/checkout" className="btn btn-unique">Proceed to Checkout</a>
+						        	 <a href={this.state.proceedButtonLink} className="btn btn-unique p-3">Proceed to Checkout</a>
 						         </div>
 						      </div>
 						   </div>

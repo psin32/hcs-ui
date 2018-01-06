@@ -38,6 +38,7 @@ class Myaddress extends Component {
 			newaddress : false,
 			responseReceived : false
 		};
+		document.title = "My Account | Addresses";
 	}
 	
 	componentWillMount() {
@@ -290,13 +291,52 @@ class Myaddress extends Component {
 			billing : false,
         });
 	}
+	
+	onClickDeleteAddress(e) {
+		e.preventDefault();
+		let addressId = e.target.name;
+		
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+	    
+	    let deleteAddressUrl = process.env.REACT_APP_USER_APP_DELETE_ADDRESS_URL;
+
+        let port = process.env.REACT_APP_USER_APP_PORT;
+
+	    api.delete(document.location.protocol + "//" +document.location.hostname + port + deleteAddressUrl + addressId)
+	    .then((response) => {
+            this.setState({
+    			responseReceived : true
+            });	   
+            this.fetchAllAddresses();
+	    })
+	    .catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+	    });
+	}
 
     render() {
 
 	    if(this.state.noaddress && !this.state.newaddress) {
 	    	return (
 					<div className="col-lg-8">
-						<Loader data={this.state.responseReceived}/>
+						<Loader data={this.state.responseReceived} fullscreen="true"/>
 						<div className="padding-top-2x mt-2 hidden-lg-up"></div>
 						<h4>Address</h4>
 						<hr className="padding-bottom-1x"/>
@@ -367,7 +407,7 @@ class Myaddress extends Component {
 
 	    return (
 				<div className="col-lg-8">
-					<Loader data={this.state.responseReceived}/>
+					<Loader data={this.state.responseReceived} fullscreen="true"/>
 					<div id="updatemessage" style= {{display: 'none'}}>
 						<div className="alert alert-success">
 							<strong>Success!</strong> Your address is successfully updated
@@ -377,6 +417,7 @@ class Myaddress extends Component {
 					<h4>Address</h4>
 					<hr className="padding-bottom-1x"/>
 					{addressDropdown}
+					<div className="delete-address-link"><a href="#" onClick={this.onClickDeleteAddress.bind(this)} name={addressId}>Delete address</a></div>
 					<form className="row" onSubmit={this.onSubmit}>
 						<div className="col-md-6">
 							<div className="form-group">

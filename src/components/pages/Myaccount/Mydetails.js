@@ -33,6 +33,7 @@ class Mydetails extends Component {
 			token : "",
 			responseReceived : false
 		};
+		document.title = "My Account | Details";
 	}
 	
 	componentWillMount() {

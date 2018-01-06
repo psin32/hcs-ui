@@ -68,25 +68,6 @@ class Navbar extends Component {
 	    	            
 	    	            {categories}
 	    	            
-	    	            {tokenCookie && register ? (
-	    	    	            <li className="nav-item"><a id="navbarDropdown2" data-target="#" href="/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="nav-link">Welcome {name}<i className="fa fa-caret-down"></i></a>
-	    	    	              <ul aria-labelledby="navbarDropdown2" className="dropdown-menu">
-	    	    	              	<li><a href="/myaccount#details" className="dropdown-item">My Details</a></li>
-	    	    	                <li><a href="/myaccount#address" className="dropdown-item">My Addresses</a></li>
-	    	    	                <li><a href="/myaccount#orders" className="dropdown-item">Your Orders</a></li>
-	    	    	                <li><a href="/myaccount" className="dropdown-item">Credit & debit cards</a></li>
-	    	    	                <li><a href="/clearcookie#logout" className="dropdown-item"><b>Log out</b></a></li>
-	    	    	              </ul>
-	    	    	            </li>
-	    	            ) : (
-	    	    	            <li className="nav-item">
-	    	    	              <ul className="list-inline">
-	    	    	                <li className="list-inline-item"><a href="/login" className="nav-link">Sign In</a></li>
-	    	    	                <li className="list-inline-item"><a href="/registration" className="nav-link">Register</a></li>
-	    	    	              </ul>
-	    	    	            </li>
-	    	            )}
-	    	            
 							<li className="nav-item">
 							    <ul className="list-inline">
 							       <li className="list-inline-item">

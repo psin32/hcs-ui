@@ -8,6 +8,7 @@ import jquery from 'jquery';
 import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
+import Topbar from '../common/Topbar.js'
 
 class OrderConfirmation extends Component {
 
@@ -221,6 +222,7 @@ class OrderConfirmation extends Component {
 
 	    return (
 			<div>
+			  <Topbar />
 		      <Navbar />
 		      <SearchPanel />
 		        <Loader data={this.state.responseReceived} fullscreen="true"/>

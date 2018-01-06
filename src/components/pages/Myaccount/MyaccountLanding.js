@@ -6,6 +6,7 @@ import Myaddress from './Myaddress.js'
 import Mydetails from './Mydetails.js'
 import OrderHistory from './OrderHistory.js'
 import {withRouter} from "react-router-dom";
+import Topbar from '../common/Topbar.js'
 
 class MyaccountLanding extends Component {
 
@@ -23,6 +24,7 @@ class MyaccountLanding extends Component {
 		this._onAddressClick = this._onAddressClick.bind(this);
 		this._onDetailsClick = this._onDetailsClick.bind(this);
 		this._onOrdersClick = this._onOrdersClick.bind(this);
+		document.title = "My Account";
 	}
 
 	_onAddressClick() {
@@ -95,6 +97,7 @@ class MyaccountLanding extends Component {
 			
 	    return (
 			<div>
+			  <Topbar />
 		      <Navbar />
 		      <SearchPanel />
 		      <section>

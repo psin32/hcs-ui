@@ -206,7 +206,7 @@ class AddAddress extends Component {
 		);	    	
 	    
 	    return (
-			<form className="row" onSubmit={(e) => {this.state.isGuestUser ? this.props.guestAddress(e, this.state) : this.onSubmit}}>
+			<form className="row" onSubmit={(e) => {this.state.isGuestUser ? this.props.guestAddress(e, this.state) : this.onSubmit(e)}}>
 				<div className="col-md-6">
 					<div className="form-group">
 						<label for="account-company">Title</label>

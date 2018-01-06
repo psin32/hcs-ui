@@ -19,6 +19,7 @@ class OrderHistory extends Component {
 			displayOrderHistory : true,
 			displayOrderDetails : false
 		};
+		document.title = "My Account | Orders";
 	}
 	
 	componentWillMount() {
@@ -115,45 +116,55 @@ class OrderHistory extends Component {
     	if(this.state.displayOrderHistory) {
     		
     		pageHeader = "Order History";
-    		const orders = this.state.orders.map((alldata, index) => {
-	  		      return (
-	  		    		  <div className="row pt-3 pb-3 items-ordered">
-	  		    		  	<div className="col col-lg-5 col-md-4 col-sm-12 col-12">
-	  		    		  		<a href="" onClick={this.onClickOrder.bind(this)} className="order-details-link" name={alldata.ordersId}>{alldata.ordersId}</a>
-	  		    		  	</div>
-	  		    		  	<div className="col col-lg-2 col-md-4 col-sm-12 col-12">
-	  		    		  		£{alldata.formattedOrdertotal}<br/>
-	  		    		  	</div>
-	  		    		  	<div className="col col-lg-3 col-md-2 col-sm-12 col-12">
-	  		    		  		{alldata.timeplaced}
-	  		    		  	</div>
-	  		    		  	<div className="col col-lg-2 col-md-2 col-sm-12 col-12">
-	  		    		  		Completed
-	  		    		  	</div>
-	  		    		  </div>
-	  		    		  
-	  		      );
-	  		});
-	  	    
-	  	    if(this.state.responseReceived) {
-	  	    	content = (
-	  				<section className="cart">
-	  						<div>
-	  							<div className="cart-heading text-center">
-	  								<div className="row">
-	  									<div className="col-5">Order Id</div>
-	  									<div className="col-2">Total Price</div>
-	  									<div className="col-3">Date</div>
-	  									<div className="col-2">Status</div>
-	  								</div>
-	  							</div>
-	  							<div className="cart-body text-center">
-	  								{orders}
-	  							</div>
-	  						</div>	
-	  			    </section>
-	  	    	);
-	  	    }    	
+    		if(this.state.orders.length > 0) {
+	    		const orders = this.state.orders.map((alldata, index) => {
+		  		      return (
+		  		    		  <div className="row pt-3 pb-3 items-ordered">
+		  		    		  	<div className="col col-lg-5 col-md-4 col-sm-12 col-12">
+		  		    		  		<a href="" onClick={this.onClickOrder.bind(this)} className="order-details-link" name={alldata.ordersId}>{alldata.ordersId}</a>
+		  		    		  	</div>
+		  		    		  	<div className="col col-lg-2 col-md-4 col-sm-12 col-12">
+		  		    		  		£{alldata.formattedOrdertotal}<br/>
+		  		    		  	</div>
+		  		    		  	<div className="col col-lg-3 col-md-2 col-sm-12 col-12">
+		  		    		  		{alldata.timeplaced}
+		  		    		  	</div>
+		  		    		  	<div className="col col-lg-2 col-md-2 col-sm-12 col-12">
+		  		    		  		Completed
+		  		    		  	</div>
+		  		    		  </div>
+		  		    		  
+		  		      );
+		  		});
+		  	    
+		  	    if(this.state.responseReceived) {
+		  	    	content = (
+		  				<section className="cart">
+		  						<div>
+		  							<div className="cart-heading text-center">
+		  								<div className="row">
+		  									<div className="col-5">Order Id</div>
+		  									<div className="col-2">Total Price</div>
+		  									<div className="col-3">Date</div>
+		  									<div className="col-2">Status</div>
+		  								</div>
+		  							</div>
+		  							<div className="cart-body text-center">
+		  								{orders}
+		  							</div>
+		  						</div>	
+		  			    </section>
+		  	    	);
+		  	    }
+    		} else {
+    			if(this.state.responseReceived) {
+    				content = (
+	    		  		<div className="cart">
+		  					You don't have any orders.
+		  			    </div>
+		  	    	);
+    			}
+    		}
     	}
     	
     	if(this.state.displayOrderDetails) {

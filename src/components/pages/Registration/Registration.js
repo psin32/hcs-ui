@@ -3,11 +3,13 @@ import Navbar from '../common/Navbar.js'
 import SearchPanel from '../common/SearchPanel.js'
 import Footer from '../common/Footer.js'
 import RegistrationForm from '../../forms/RegistrationForm.js'
+import Topbar from '../common/Topbar.js'
 
 class Registration extends Component {
   render() {
     return (
 		<div>
+		  <Topbar />
 	      <Navbar />
 	      <SearchPanel />
 	      <section>

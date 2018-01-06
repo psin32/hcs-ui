@@ -7,6 +7,7 @@ import Loader from '../common/Loader.js'
 import SubcategoriesSidePanel from './SubcategoriesSidePanel.js'
 import ProductLister from '../PLP/ProductLister.js'
 import axios from 'axios';
+import Topbar from '../common/Topbar.js'
 
 class Category extends Component {
 
@@ -32,13 +33,15 @@ class Category extends Component {
 	    
 	    api.get(categoryDetailsURL +url)
 	    .then((response) => {
+	    	console.log(response.data.catentries);
             this.setState({
             	categorydata : response.data.category,
-            	subcategorydata : response.data.subcategories,
+            	subcategorydata : response.data.category.childcategories,
             	catentrydata : response.data.catentries,
     			description : response.data.category.description,
     			responseok : true
             });
+            document.title = this.state.description.name;
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
@@ -54,7 +57,7 @@ class Category extends Component {
 	render() {
 		
 		let subcategories = null;
-	    if(this.state.responseok && this.state.subcategorydata.length>0) {
+	    if(this.state.responseok && this.state.subcategorydata && this.state.subcategorydata.length>0) {
 	    	subcategories = <SubcategoriesSidePanel data={this.state.subcategorydata}/>
 	    }
 
@@ -67,6 +70,7 @@ class Category extends Component {
 	    if(this.state.pagenotfound) {
 	    	return (
 					<div>
+					    <Topbar />
 						<Navbar />
 						<SearchPanel />
 						<section>
@@ -90,7 +94,7 @@ class Category extends Component {
 	    }
 
 		let topnavCategoryContent = null;
-		if(this.state.categorydata.topnav) {
+		if(this.state.categorydata.topnav || this.state.catentrydata.length == 0) {
 			topnavCategoryContent = (
 		          	<div className="items">
 		          		<div className="row">
@@ -147,6 +151,7 @@ class Category extends Component {
 
 	    return (
 			<div>
+			  <Topbar />
 		      <Navbar />
 		      <SearchPanel />
 		        <Loader data={this.state.responseok}/>

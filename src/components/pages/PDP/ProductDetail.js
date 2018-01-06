@@ -8,6 +8,7 @@ import axios from 'axios';
 import Loader from '../common/Loader.js'
 import AddItemForm from '../../forms/AddItemForm.js';
 import Cookies from 'universal-cookie';
+import Topbar from '../common/Topbar.js'
 
 class ProductDetails extends Component {
 
@@ -48,6 +49,7 @@ class ProductDetails extends Component {
     			responseok : true,
     			responseReceived : true
             });
+            document.title = this.state.description.name;
             
             response.data.categories.map((alldata, index) => {
             	if(index == 0) {
@@ -116,6 +118,7 @@ class ProductDetails extends Component {
 	    if(this.state.pagenotfound) {
 	    	return (
 					<div>
+					 	<Topbar />
 						<Navbar />
 						<SearchPanel />
 						<section>
@@ -140,6 +143,7 @@ class ProductDetails extends Component {
 
 	    return (
 			<div>
+			  <Topbar />
 		      <Navbar />
 		      <Loader data={this.state.responseReceived} fullscreen="true"/>
 		      <div className="details-page">

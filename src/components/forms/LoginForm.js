@@ -23,6 +23,9 @@ class LoginForm extends Component {
 	}
 
 	onSubmit = (e) => {
+		const cookies = new Cookies();
+		const guestToken = cookies.get('TOKEN');
+
 		this.setState({
         	responseok : false
         });		
@@ -46,7 +49,7 @@ class LoginForm extends Component {
 				responseReceived : true
 	        });		
 	    	if (response.status === 200) {
-	    		this.fetchBasket();
+	    		this.fetchBasket(guestToken);
 	    	}
 	    })
 	    .catch((error) => {
@@ -61,14 +64,22 @@ class LoginForm extends Component {
 	    }); 
 	}
 	
-	fetchBasket() {
+	fetchBasket(guestToken) {
 		const cookies = new Cookies();
 		const token = cookies.get('TOKEN');
 
-	    const api = axios.create({
-	    	headers: {'Authorization': 'Bearer '+token},
-	    	withCredentials: true
-	    });
+		let api = null;
+		if(guestToken) {
+		    api = axios.create({
+		    	headers: {'Authorization': 'Bearer '+token, 'Token' : guestToken},
+		    	withCredentials: true
+		    });
+		} else {
+		    api = axios.create({
+		    	headers: {'Authorization': 'Bearer '+token},
+		    	withCredentials: true
+		    });
+		}
 	    
 	    let basketURL = process.env.REACT_APP_BASKET_APP_GET_CURRENT_BASKET_URL;
 	    
@@ -100,7 +111,7 @@ class LoginForm extends Component {
 		const { title, firstname, lastname, email, password, confirmpassword} = this.state;
 
 	    return (
-	    	  <div className="col-md-6">
+	    	  <div className="col-md-12">
 	    	 	  <Loader data={this.state.responseReceived}/>
 	    	  	  <div id="errormessage" style= {{display: 'none'}}>
 			    	  <div className="alert alert-danger">

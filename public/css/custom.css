@@ -242,7 +242,7 @@ to {
 	content: "\e080"; /* adjust as needed, taken from bootstrap.css */
 }
 
-[data-toggle="collapse"]:after {
+.card-header [data-toggle="collapse"]:after {
 	display: inline-block;
 	display: inline-block;
 	font: normal normal normal 14px/1 FontAwesome;
@@ -257,7 +257,7 @@ to {
 	margin-right: 10px;
 }
 
-[data-toggle="collapse"].collapsed:after {
+.card-header [data-toggle="collapse"].collapsed:after {
 	transform: rotate(0deg);
 }
 
@@ -616,4 +616,9 @@ to {
 .order-details-link {
 	text-decoration: underline;
 	color: #ff6b6b;
+}
+
+.delete-address-link {
+	float: right;
+	font-size: 0.8em;
 }

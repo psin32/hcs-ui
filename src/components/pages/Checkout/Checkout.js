@@ -44,6 +44,7 @@ class Checkout extends Component {
 		this.onSubmitDeliveryMethod = this.onSubmitDeliveryMethod.bind(this);
 		this.onClickShippingMethod = this.onClickShippingMethod.bind(this);
 		this.onSubmitShippingMethod = this.onSubmitShippingMethod.bind(this);
+		document.title = 'Checkout';
 	}
 	
 	componentWillMount() {
