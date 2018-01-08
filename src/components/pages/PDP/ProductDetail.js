@@ -20,7 +20,6 @@ class ProductDetails extends Component {
 			data : [],
 		    description : [],
 		    fullimagedata : [],
-		    categoriesdata : [],
 		    listpricedata : [],
 		    attributes : [],
 		    defaultItem : "",
@@ -53,14 +52,10 @@ class ProductDetails extends Component {
 				}
 			});
 
-            response.data.categories.map((alldata, index) => {
-            	if(index == 0) {
-    	            this.setState({
-    	            	primarycategoryname : alldata.name,
-    	            	primarycategoryurl : alldata.url
-    	            });
-            	}
-      	    });               
+            this.setState({
+            	primarycategoryname : response.data.category.description.name,
+            	primarycategoryurl : response.data.category.url
+            });
 	    })
 	    .catch((error) => {
 	    	if (error.response) {
@@ -85,7 +80,6 @@ class ProductDetails extends Component {
 			selectedPartnumber : childdata.partnumber,
 			child : response.data.child,
 			description : childdata.description,
-			categoriesdata : response.data.categories,
 			listpricedata : childdata.listprice,
 			attributes: response.data.product.attributes,
 			responseok : true,
