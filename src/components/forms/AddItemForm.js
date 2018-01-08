@@ -30,61 +30,61 @@ class AddItemForm extends Component {
 	}
 
 	onSubmit = (e) => {
-		const cookies = new Cookies();
-		const token = cookies.get('TOKEN');
-		let loadingText = jquery("#load").attr("data-loading-text");
-		let buttonDefaultValue = jquery("#load").html();
-		jquery("#load").html(loadingText);
-		this.setState({
-			responseReceived : false,
-        	responseok : false
-        });
-	    e.preventDefault();
-	    const { partnumber, quantity} = this.state;
-
-	    let api = null;
-	    if(token) {
-		    api = axios.create({
-		    	headers: {'Authorization': 'Bearer '+token},
-		    	withCredentials: true
-		    });
-	    } else {
-		    api = axios.create({
-		    	withCredentials: true
-		    });
-	    }
-	    
-	    let addItemURL = process.env.REACT_APP_BASKET_APP_ADD_ITEM_URL;
-	    
-	    api.put(addItemURL,
-	    	{
-	    	    "partnumber": this.props.partnumber,
-	    	    "quantity": this.props.quantity
-	    	}
-	    )
-	    .then((response) => {
+		e.preventDefault();
+		if(this.props.partnumber == '') {
+			document.getElementById("errormessage").style.display = "block";
+			jquery('#errormessage').delay(2000).hide(1000);
+		} else {
+			const cookies = new Cookies();
+			const token = cookies.get('TOKEN');
+			let loadingText = jquery("#load").attr("data-loading-text");
+			let buttonDefaultValue = jquery("#load").html();
+			jquery("#load").html(loadingText);
 			this.setState({
-				responseReceived : true
-	        });		
-	    	if (response.status === 200) {
-	    		document.getElementById("successmessage").style.display = "block";
-	    		jquery('#successmessage').delay(3000).hide(1000);
-	    		const basketCount = cookies.get('BASKET_COUNT');
-	    		document.getElementById("basketCount").innerText = basketCount;
-	    	}
-	    	jquery("#load").html(buttonDefaultValue);
-	    })
-	    .catch((error) => {
-	    	jquery("#load").html(buttonDefaultValue);
-			this.setState({
-				responseReceived : true
-	        });		
-	    	if (error.response) {
-		    	if(error.response.status === 401) {
-		    		document.getElementById("errormessage").style.display = "block";
+				responseReceived : false,
+	        	responseok : false
+	        });
+		    const { partnumber, quantity} = this.state;
+	
+		    let api = null;
+		    if(token) {
+			    api = axios.create({
+			    	headers: {'Authorization': 'Bearer '+token},
+			    	withCredentials: true
+			    });
+		    } else {
+			    api = axios.create({
+			    	withCredentials: true
+			    });
+		    }
+		    
+		    let addItemURL = process.env.REACT_APP_BASKET_APP_ADD_ITEM_URL;
+		    
+		    api.put(addItemURL,
+		    	{
+		    	    "partnumber": this.props.partnumber,
+		    	    "quantity": this.props.quantity
 		    	}
-	    	}
-	    }); 
+		    )
+		    .then((response) => {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if (response.status === 200) {
+		    		document.getElementById("successmessage").style.display = "block";
+		    		jquery('#successmessage').delay(3000).hide(1000);
+		    		const basketCount = cookies.get('BASKET_COUNT');
+		    		document.getElementById("basketCount").innerText = basketCount;
+		    	}
+		    	jquery("#load").html(buttonDefaultValue);
+		    })
+		    .catch((error) => {
+		    	jquery("#load").html(buttonDefaultValue);
+				this.setState({
+					responseReceived : true
+		        });		
+		    }); 
+		}
 	}
 
 	render() {
@@ -93,6 +93,11 @@ class AddItemForm extends Component {
 	    return (
 	    	  <li>
 		          <form id="addtobag-form"  onSubmit={this.onSubmit} className="custom-form form">
+					      <p className="cart-feedback error" style= {{display: 'none'}} id="errormessage">
+					      	<i className="fa fa-exclamation-triangle"></i> 
+					      	Please select all attributes of this item.
+					      </p>			      
+		          
 			            <input type="hidden" id="partnumber" name="partnumber" value={partnumber} />
 			            <input type="hidden" id="quantity" name="quantity" value={quantity} />
 			            <button type="submit" className="btn btn-unique" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Adding item...">Add To Bag</button>

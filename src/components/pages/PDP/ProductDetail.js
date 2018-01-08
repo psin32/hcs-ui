@@ -9,24 +9,32 @@ import Loader from '../common/Loader.js'
 import AddItemForm from '../../forms/AddItemForm.js';
 import Cookies from 'universal-cookie';
 import Topbar from '../common/Topbar.js'
+import Hashmap from 'hashmap';
 
 class ProductDetails extends Component {
 
 	constructor() {
 		super();
 		this.state = {
-		    data : [],
+			originalresponse : [],
+			data : [],
 		    description : [],
 		    fullimagedata : [],
 		    categoriesdata : [],
 		    listpricedata : [],
+		    attributes : [],
+		    defaultItem : "",
 		    primarycategoryname : "",
 		    primarycategoryurl : "",
 		    responseok : false,
 		    pagenotfound : false,
 		    responseReceived : false,
-		    quantity : 1
+		    quantity : 1,
+		    imageLoadFailed : false,
+		    selectedPartnumber : '',
+		    partnumber : ''
 		};
+		this.onClickAttribute = this.onClickAttribute.bind(this);
 	}
 	
 	componentWillMount() {
@@ -39,18 +47,12 @@ class ProductDetails extends Component {
 	    
 	    api.get(productDetailsURL +url)
 	    .then((response) => {
-	    	
-            this.setState({
-    			data : response.data,
-    			description : response.data.description,
-    			fullimagedata : response.data.fullimage,
-    			categoriesdata : response.data.categories,
-    			listpricedata : response.data.listprice,
-    			responseok : true,
-    			responseReceived : true
-            });
-            document.title = this.state.description.name;
-            
+	    	response.data.child.map((childdata, index) => {
+				if(childdata.partnumber == response.data.defaultItem) {
+					this.setProductData(response, childdata);
+				}
+			});
+
             response.data.categories.map((alldata, index) => {
             	if(index == 0) {
     	            this.setState({
@@ -75,6 +77,36 @@ class ProductDetails extends Component {
 	    });
 	}
 	
+	setProductData(response, childdata, selectedAttribute) {
+        this.setState({
+        	originalresponse :  response,
+        	originalchilddata : childdata,
+			data : response.data,
+			selectedPartnumber : childdata.partnumber,
+			child : response.data.child,
+			description : childdata.description,
+			categoriesdata : response.data.categories,
+			listpricedata : childdata.listprice,
+			attributes: response.data.product.attributes,
+			responseok : true,
+			responseReceived : true
+        });
+        
+        if(childdata.fullimage) {
+            this.setState({
+    			fullimagedata : childdata.fullimage
+            });
+        } else {
+            this.setState({
+    			fullimagedata : response.data.product.fullimage
+            });
+        }
+        
+        this.setDefiningAttributes(selectedAttribute);
+        
+        document.title = this.state.description.name;
+	}
+	
 	onChange = (e) => {
 	    const state = this.state
 	    state[e.target.name] = e.target.value;
@@ -87,18 +119,216 @@ class ProductDetails extends Component {
         });
 	}
 	
+	imageFallback() {
+	    this.setState({
+	    	imageLoadFailed : true
+        });
+	}
+	
+	onClickAttribute(e) {
+		let attributeName = e.target.name;
+		let attributeValue = e.target.value;
+		this.selectDefiningAttributes(attributeName, attributeValue);
+	}
+	
+	selectDefiningAttributes(attributeName, attributeValue) {
+		let attribute = null;
+        var attributes = [];
+		this.state.definingAttributes.map((alldata, index) => {
+			var definingAttributesMap = [];
+			if(alldata.name == attributeName) {
+				alldata.value.map((attrvalue, index) => {
+					let map = null;
+					if(attrvalue.value == attributeValue) {
+						map = {'value' : attrvalue.value, 'selected' : true};
+						definingAttributesMap.push(map);
+					} else {
+						map = {'value' : attrvalue.value, 'selected' : false};
+						definingAttributesMap.push(map);
+					}
+				});
+	        	attribute = {'name' : alldata.name, 'value' : definingAttributesMap, 'sequence' : alldata.sequence, 'displayType' : alldata.displayType};
+	        	attributes.push(attribute);
+			} else {
+				attributes.push(alldata);
+			}
+		});
+        if(attributes) {
+	        this.setState({
+	        	definingAttributes : attributes
+	        });
+        }
+        
+        this.state.child.map((childItem, index) => {
+    		let totalDefAttr = 0;
+    		let matchedCount = 0;
+        	if(childItem.attributes) {
+	        	childItem.attributes.map((childattr, index) => {
+	    			if(childattr.type == 'DEFINING') {
+	    				if(childattr.value) {
+	    					attributes.map((definingAttr, index) => {
+	    						let attrName = definingAttr.name;
+	    						definingAttr.value.map((attrvalue, index) => {
+	    							if(attrvalue.selected && attrvalue.value == childattr.value && attrName === childattr.name) {
+	    								matchedCount = matchedCount + 1;
+	    							}
+	    						});
+	    					});
+	    				}
+	    				totalDefAttr = totalDefAttr + 1;
+	    			}
+	    		});
+    		}
+        	
+        	if(matchedCount === totalDefAttr) {
+                this.setState({
+                	originalchilddata : childItem,
+        			selectedPartnumber : childItem.partnumber,
+        			description : childItem.description,
+        			listpricedata : childItem.listprice,
+        			partnumber : childItem.partnumber
+                });
+        	}
+        });
+	}
+	
+	setDefiningAttributes(selectedValue) {
+		let attribute = null;
+        var attributes = [];
+
+        this.state.attributes.map((productattr, index) => {
+        	if(productattr.type == 'DEFINING') {
+            	let productAttributeName = productattr.name;
+            	let sequence = productattr.sequence;
+            	let displayType = productattr.displayType;
+            	let map = null;
+            	var definingAttributesMap = [];
+		        if(this.state.child) {
+		        	this.state.child.map((childItem, index) => {
+		        		if(childItem.attributes) {
+				        	childItem.attributes.map((childattr, index) => {
+				    			if(childattr.name == productAttributeName) {
+				    				if(childattr.value) {
+				    					let existingAttribute = false;
+				    					if(definingAttributesMap) {
+				    						definingAttributesMap.map((mapItem, index) => {
+				    							if(mapItem.value == childattr.value) {
+				    								existingAttribute = true;
+				    							}
+				    						});
+				    					}
+				    					if(childattr.value == selectedValue) {
+				    						map = {'value' : childattr.value, 'selected' : true};
+				    						if(!existingAttribute) {
+				    							definingAttributesMap.push(map);
+				    						}
+				    					} else {
+				    						map = {'value' : childattr.value, 'selected' : false};
+				    						if(!existingAttribute) {
+				    							definingAttributesMap.push(map);
+				    						}
+				    					}
+				    				}
+				    			}
+				    		});
+		        		}
+		        	});
+		        }
+		        if(definingAttributesMap) {
+		        	attribute = {'name' : productAttributeName, 'value' : definingAttributesMap, 'sequence' : sequence, 'displayType' : displayType};
+		        	attributes.push(attribute);
+		        }
+	        }
+        });
+        if(attributes) {
+	        this.setState({
+	        	definingAttributes : attributes
+	        });
+        }
+	}
+	
 	render() {
+		
+		let definingAttributeContent = null;
+		if(this.state.definingAttributes) {
+			
+			definingAttributeContent = this.state.definingAttributes.map((alldata, index) => {
+				let divContent = null;
+				var finalContent = [];
+				let content = null;
+				let selectedItem = null;
+				if(alldata.displayType === 'COLOR') {
+					content = alldata.value.map((attrvalue, index) => {
+						if(attrvalue.selected) {
+							selectedItem = attrvalue.value;
+						}
+						return (
+							<div data-value={attrvalue.value} className="swatch-element color available">
+								<div className="tooltip">{attrvalue.value}</div>
+								<input id={'swatch-0-'+attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
+								<label for={'swatch-0-'+attrvalue.value}><span style={{backgroundColor: '#086fcf'}}></span></label>
+							</div>
+						);
+					});
+				} else {
+					content = alldata.value.map((attrvalue, index) => {
+						if(attrvalue.selected) {
+							selectedItem = attrvalue.value;
+						}
+						return (
+							<div data-value={attrvalue.value} className="swatch-element plain available">
+								<input id={'swatch-0-'+attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
+								<label for={'swatch-0-'+attrvalue.value}>{attrvalue.value}</label>
+							</div>
+						);
+					});
+				}
+				return (
+					<div className="swatch clearfix col col-lg-12 col-md-12 col-sm-12 col-12">
+						<div className="header">{alldata.name}: {selectedItem}</div>
+						{content}
+					</div>
+				);
+			});
+		}
 		
 		const { quantity} = this.state;
 		const fullImages = this.state.fullimagedata.map((alldata, index) => {
-		      return (
-		    		  <div className="item"> <img src={alldata.url} /></div>
-		      );
+			
+			let imageUrl = null;
+			if(this.state.imageLoadFailed) {
+				imageUrl = <img src="/img/backup.jpg" />
+			} else {
+				imageUrl = <img src={"/"+alldata.url} onError={this.imageFallback.bind(this)} />
+			}
+			
+		    return (
+	    		  <div className="item">
+	    		  	{imageUrl}
+	    		  </div>
+		    );
+		});
+		
+		const attributes = this.state.attributes.map((alldata, index) => {
+			let data = null;
+			if(alldata.type == 'DESCRIPTIVE') {
+				data = (
+					<ul className="property list-unstyled">
+						<li className="title">{alldata.name}</li>
+						<li className="value">{alldata.value}</li>
+					</ul>
+				);
+			}
+			return (
+				<div>					
+					{data}
+				</div>
+			);
 		});
 		
 	    const price = this.state.listpricedata.map((alldata, index) => {
 		      return (
-	    		  <div className="price d-flex justify-content-between align-items-center text-primary">${alldata.formattedPrice}
+	    		  <div className="price d-flex justify-content-between align-items-center text-primary">£{alldata.formattedPrice}
 	                <div className="d-flex justify-content-center">
 	                  <ul className="rate list-inline">
 	                    <li className="list-inline-item"><i className="fa fa-star-o"></i></li>
@@ -170,14 +400,23 @@ class ProductDetails extends Component {
 			              {price}
 			              <div className="model">
 			                <ul className="list-unstyled">
-			                  <li className="text-uppercase"><span>Item No: </span>{this.state.data.partnumber}</li>
+			                  <li className="text-uppercase"><span>Item No: </span>{this.state.selectedPartnumber}</li>
 			                  <li className="text-uppercase"><span>Category: </span>{ this.state.primarycategory}</li>
 			                  <li className="text-uppercase"><span>Availability: </span>In Stock</li>
 			                </ul>
 			              </div>
+			              
 			              <div className="description">
 			                <p>{this.state.description.shortdescription}</p>
 			              </div>
+			              
+			              <div className="row swatches pt-4">
+			              	<form ref="attributeForm">
+			              		{definingAttributeContent}
+			              	</form>
+			              </div>
+			              
+			              
 			              <div className="row d-flex justify-content-between">
 			                <div className="col-lg-6">
 			                  <ul className="product-quantity list-inline">
@@ -194,42 +433,16 @@ class ProductDetails extends Component {
 			                  </ul>
 			                </div>
 			              </div>
+			              
 			              <div className="CTAs"> 
 			                <ul className="list-inline">
 			                  <li className="list-inline-item">
-			                  	<AddItemForm partnumber={this.state.data.partnumber} quantity={this.state.quantity}/>
+			                  	<AddItemForm partnumber={this.state.partnumber} quantity={this.state.quantity}/>
 			                  </li>
 			                </ul>
 			              </div>
 			              <div className="specifications">
-			                <ul className="property list-unstyled">
-			                  <li className="title">Focal Length</li>
-			                  <li className="value">70-200mm</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Maximum Apparature</li>
-			                  <li className="value">F/2.8</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Minimum Apparature</li>
-			                  <li className="value">F/22</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Lens Construction</li>
-			                  <li className="value">21 element in 16 groups (with 7 ED and some Nano Crystal lens elements)</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Weight</li>
-			                  <li className="value">Approximately 1.540 g/3.4 lb</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Filter/Attachment size</li>
-			                  <li className="value">77mm</li>
-			                </ul>
-			                <ul className="property list-unstyled">
-			                  <li className="title">Maimum Reproduction Ratio</li>
-			                  <li className="value">.12x</li>
-			                </ul>
+			                {attributes}
 			              </div>
 			            </div>
 			          </div>

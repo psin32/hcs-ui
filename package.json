@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "hashmap": "^2.3.0",
     "jquery": "^3.2.1",
     "query-string": "^5.0.1",
     "react": "^16.1.1",
     "react-cookie": "^2.1.2",
     "react-dom": "^16.1.1",
+    "react-image-fallback": "^7.0.1",
     "react-responsive-carousel": "^3.1.28",
     "react-route": "^1.0.3",
     "react-router-dom": "^4.2.2",

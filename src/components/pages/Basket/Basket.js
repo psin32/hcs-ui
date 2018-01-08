@@ -232,18 +232,20 @@ class Basket extends Component {
 	    const items = this.state.data.map((alldata, index) => {
 		      return (
 			            <div className="row cart-item">
-			               <div className="col col-lg-5 col-md-5 col-sm-12 col-12">
+			               <div className="col col-lg-1 col-md-1 col-sm-4 col-4">
 			                  <div className="product-overview text-left d-flex">
 			                     <a href={ "/product/"+alldata.url } className="product-img">
 			                     	<img src={ alldata.image }  alt="product" className="thumb" />
 			                     </a>
+				              </div>
+					        </div>
+			                <div className="col col-lg-4 col-md-4 col-sm-8 col-8 text-left">
 			                     <div className="product-details">
 			                        <a href={ "/product/"+alldata.url }>
 			                           <h3 className="h4 product-name">{ alldata.name }</h3>
 			                        </a>
 			                     </div>
 			                  </div>
-			               </div>
 			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12 hide-basket-item"><strong>£{ alldata.formattedListprice }</strong></div>
 			               <div className="col col-lg-2 col-md-2 col-sm-12 col-12">
 			                  <div className="product-quantity d-flex align-left align-items-center justify-content-center quantity-section">

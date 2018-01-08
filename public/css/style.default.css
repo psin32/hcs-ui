@@ -1301,7 +1301,7 @@ section.products .item .product-image, section.related-items .item .product-imag
 	{
 	position: relative;
 	padding-top: 30px;
-	height: 265px;
+	height: 360px;
 }
 
 section.products .item .product-image:hover .overlay, section.related-items .item .product-image:hover .overlay
@@ -1504,7 +1504,6 @@ section.item-details .model span {
 
 section.item-details .description {
 	margin-top: 20px;
-	margin-bottom: 30px;
 	color: #777;
 	font-weight: 300;
 	line-height: 1.7em

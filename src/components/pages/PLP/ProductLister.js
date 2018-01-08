@@ -10,10 +10,15 @@ class ProductLister extends Component {
 	
 	render() {
 	    const products = this.props.data.map((alldata, index) => {
+	    	
+	    	  let mainImage = null;
+	    	  if(alldata.thumbnail[0] && alldata.thumbnail[0].name == 'front-view') {
+	    		  mainImage = alldata.thumbnail[0].url;
+	    	  }
 		      return (
 						<div class="col-lg-3 col-md-4 col-sm-6">
 							<div class="item text-center">
-								<div class="product-image"><img src={alldata.mainimage} alt="camera"/>
+								<div class="product-image"><img src={"/"+mainImage} alt="camera"/>
 									<div class="overlay"> <a href="#" class="wishlist"><i class="fa fa-heart"></i></a>
 										<ul class="list-unstyled">
 											<li><a href={"/product/"+alldata.url} class="btn btn-unique">View Detail</a></li>

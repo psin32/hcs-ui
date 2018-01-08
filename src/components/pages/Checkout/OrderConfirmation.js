@@ -88,7 +88,7 @@ class OrderConfirmation extends Component {
 		      return (
 		    		  <div className="row p-3 items-ordered">
 		    		  	<div className="col col-lg-2 col-md-2 col-sm-4 col-4">
-		    		  		<img src={alldata.image}></img>
+		    		  		<img src={alldata.image} className="thumb"></img>
 		    		  	</div>
 		    		  	<div className="col col-lg-4 col-md-4 col-sm-12 col-12">
 		    		  		{alldata.name}<br/>
