@@ -8,6 +8,7 @@ import SubcategoriesSidePanel from './SubcategoriesSidePanel.js'
 import ProductLister from '../PLP/ProductLister.js'
 import axios from 'axios';
 import Topbar from '../common/Topbar.js'
+import {createClient} from 'contentful'
 
 class Category extends Component {
 
@@ -19,8 +20,25 @@ class Category extends Component {
 		    catentrydata: [],
 		    description : [],
 		    responseok : false,
-		    pagenotfound : false
+		    pagenotfound : false,
+		    footerContent : []
 		};
+	}
+	
+	componentDidMount() {
+		
+//		const client = createClient({
+//			  // This is the space ID. A space is like a project folder in Contentful terms
+//			  space: 'txzdmd97lg8q',
+//			  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+//			  accessToken: 'b905804697ea0a6cf15bb22260b29f5c90e7f7c764cb6b4e390ba768dabf3cd4'
+//		});
+//		client.getEntries({
+//			content_type: 'category',
+//			'fields.categoryIdentifier[match]': 'health10338'
+//		})
+//		.then((response) => console.log(response.items[0].fields.content))
+//		.catch(console.error)
 	}
 
 	componentWillMount() {

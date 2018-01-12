@@ -61,7 +61,7 @@ class Navbar extends Component {
 
 	    return (
 	    	    <nav className="navbar navbar-expand-md">
-	    	      <div className="container"><a href="/" className="navbar-brand"> <img src="/img/logo.png" alt="logo"></img></a>
+	    	      <div className="container"><a href="/" className="navbar-brand"> <img src="/img/logo-new.png" alt="logo"></img></a>
 	    	        <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" className="navbar-toggler navbar-toggler-right">Menu <i className="fa fa-bars"></i></button>
 	    	        <div id="navbarSupportedContent" className="collapse navbar-collapse">
 	    	          <ul className="navbar-nav ml-auto d-md-flex flex-md-row align-items-md-center">

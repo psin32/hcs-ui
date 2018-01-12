@@ -30,9 +30,9 @@ class RegistrationForm extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    let registrationUrl = process.env.REACT_APP_USER_REGISTRATION_URL;
 
-	    api.post(document.location.protocol + "//" +document.location.hostname + port +'/register', 
+	    api.post(registrationUrl, 
 	    	{
 	    	  "users":{
 	    	    "username": email,

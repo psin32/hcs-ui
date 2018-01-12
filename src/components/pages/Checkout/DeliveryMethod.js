@@ -79,10 +79,9 @@ class DeliveryMethod extends Component {
 	    	withCredentials: true
 	    });
 	    
-        let port = process.env.REACT_APP_USER_APP_PORT;
         let getShippingAddressURL = process.env.REACT_APP_USER_APP_GET_SHIPPING_ADDRESS_URL;
 
-	    api.get(document.location.protocol + "//" +document.location.hostname + port +getShippingAddressURL)
+	    api.get(getShippingAddressURL)
 	    .then((response) => {
             this.setState({
     			data : response.data,

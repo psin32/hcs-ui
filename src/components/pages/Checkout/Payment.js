@@ -125,7 +125,7 @@ class Payment extends Component {
 	                        <div className="m-3">
 	                            <button id="payment-button" type="submit" className="btn btn-unique btn-lg btn-info">
 	                                <i className="fa fa-lock fa-lg"></i>&nbsp;
-	                                <span id="payment-button-amount">Pay £{this.props.orders.ordertotal}</span>
+	                                <span id="payment-button-amount">Pay £{this.props.orders.formattedOrdertotal}</span>
 	                            </button>
 	                        </div>
 						</form>
@@ -178,7 +178,7 @@ class Payment extends Component {
 						                        <div style={{textAlign : "center"}}>
 						                            <button id="payment-button" type="submit" className="btn btn-unique btn-lg btn-info">
 						                                <i className="fa fa-lock fa-lg"></i>&nbsp;
-						                                <span id="payment-button-amount">Pay £{this.props.orders.ordertotal}</span>
+						                                <span id="payment-button-amount">Pay £{this.props.orders.formattedOrdertotal}</span>
 						                            </button>
 						                        </div>
 						                    </form>

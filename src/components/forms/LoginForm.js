@@ -36,9 +36,9 @@ class LoginForm extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    let loginUrl = process.env.REACT_APP_USER_LOGIN_URL;
 	    
-	    api.post(document.location.protocol + "//" +document.location.hostname + port +'/login', 
+	    api.post(loginUrl, 
 	    	{
 	    	    "username": email,
 	    	    "password": password

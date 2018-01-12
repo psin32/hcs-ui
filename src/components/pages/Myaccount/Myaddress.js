@@ -54,9 +54,9 @@ class Myaddress extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    let getAddressUrl = process.env.REACT_APP_USER_GET_ADDRESS_URL;
 	    
-	    api.get(document.location.protocol + "//" +document.location.hostname + port +'/api/address')
+	    api.get(getAddressUrl)
 	    .then((response) => {
             this.setState({
     			data : response.data,
@@ -144,9 +144,9 @@ class Myaddress extends Component {
         	selectedAddressType = "S";
         }
         
-        let port = process.env.REACT_APP_USER_APP_PORT;
+        let saveAddressUrl = process.env.REACT_APP_USER_POST_SAVE_ADDRESS_URL;
 
-	    api.patch(document.location.protocol + "//" +document.location.hostname + port +'/api/address', 
+	    api.patch(saveAddressUrl, 
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{
@@ -264,6 +264,46 @@ class Myaddress extends Component {
         }
 	}
 	
+	fetchSelfAddress() {
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+	    
+	    let selfAddressUrl = process.env.REACT_APP_USER_GET_SELFADDRESS_URL;
+	    
+	    api.get(selfAddressUrl)
+	    .then((response) => {
+            this.setState({
+    			responseReceived : true
+            });	    	
+            this.setState({
+            	title : response.data.title,
+    			firstname : response.data.firstname,
+    			lastname : response.data.lastname,
+    			email1 : response.data.email1,
+				phone1 : response.data.phone1
+            });
+	    })
+	    .catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+	    });
+	}
+	
 	newAddress() {
         this.setState({
         	newaddress : true,
@@ -290,6 +330,7 @@ class Myaddress extends Component {
 			shipping : false,
 			billing : false,
         });
+        this.fetchSelfAddress();
 	}
 	
 	onClickDeleteAddress(e) {
@@ -306,9 +347,7 @@ class Myaddress extends Component {
 	    
 	    let deleteAddressUrl = process.env.REACT_APP_USER_APP_DELETE_ADDRESS_URL;
 
-        let port = process.env.REACT_APP_USER_APP_PORT;
-
-	    api.delete(document.location.protocol + "//" +document.location.hostname + port + deleteAddressUrl + addressId)
+	    api.delete(deleteAddressUrl + addressId)
 	    .then((response) => {
             this.setState({
     			responseReceived : true

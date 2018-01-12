@@ -900,3 +900,18 @@ to {
 .swatch.error code {
   font-family: monospace;
 }
+
+.swatch .plain-text label {
+  font-family: "montserratbold", sans-serif;
+  border: 1px solid #086fcf;
+  color: #086fcf;
+  cursor: pointer;
+  display: block;
+  padding: 8px;
+  text-align: center;
+}
+
+.swatch .plain-text input:not(:checked) + label {
+  color: #16161a !important;
+}
+

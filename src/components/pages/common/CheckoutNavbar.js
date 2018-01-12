@@ -18,7 +18,7 @@ class CheckoutNavbar extends Component {
 		
 	    return (
 	    	    <nav className="navbar navbar-expand-md">
-	    	      <div className="container"><a href="/" className="navbar-brand"> <img src="/img/logo.png" alt="logo"></img></a>
+	    	      <div className="container"><a href="/" className="navbar-brand"> <img src="/img/logo-new.png" alt="logo"></img></a>
 	    	          <ul className="navbar-nav ml-auto d-md-flex flex-md-row align-items-md-center">
 							<i className="fa fa-phone"> 020 1234 456</i>
 	    	          </ul>

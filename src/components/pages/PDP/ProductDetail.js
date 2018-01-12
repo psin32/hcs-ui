@@ -86,6 +86,8 @@ class ProductDetails extends Component {
 			responseReceived : true
         });
         
+        console.log("Child length  - "+response.data.child.length);
+        
         if(childdata.fullimage) {
             this.setState({
     			fullimagedata : childdata.fullimage
@@ -96,7 +98,13 @@ class ProductDetails extends Component {
             });
         }
         
-        this.setDefiningAttributes(selectedAttribute);
+        if(this.state.child && this.state.child.length === 1) {
+            this.setState({
+    			partnumber : childdata.partnumber
+            });
+        } else {
+        	this.setDefiningAttributes(selectedAttribute);
+        }
         
         document.title = this.state.description.name;
 	}
@@ -126,6 +134,7 @@ class ProductDetails extends Component {
 	}
 	
 	selectDefiningAttributes(attributeName, attributeValue) {
+		console.log(attributeName + " - "+attributeValue);
 		let attribute = null;
         var attributes = [];
 		this.state.definingAttributes.map((alldata, index) => {
@@ -251,6 +260,7 @@ class ProductDetails extends Component {
 				var finalContent = [];
 				let content = null;
 				let selectedItem = null;
+				let name = alldata.name.replace(/\s/g, '-').replace('.', '');
 				if(alldata.displayType === 'COLOR') {
 					content = alldata.value.map((attrvalue, index) => {
 						if(attrvalue.selected) {
@@ -259,8 +269,8 @@ class ProductDetails extends Component {
 						return (
 							<div data-value={attrvalue.value} className="swatch-element color available">
 								<div className="tooltip">{attrvalue.value}</div>
-								<input id={'swatch-0-'+attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
-								<label for={'swatch-0-'+attrvalue.value}><span style={{backgroundColor: '#086fcf'}}></span></label>
+								<input id={'swatch-0-'+ name +attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
+								<label for={'swatch-0-'+name+attrvalue.value}><span style={{backgroundColor: '#086fcf'}}></span></label>
 							</div>
 						);
 					});
@@ -269,12 +279,21 @@ class ProductDetails extends Component {
 						if(attrvalue.selected) {
 							selectedItem = attrvalue.value;
 						}
-						return (
-							<div data-value={attrvalue.value} className="swatch-element plain available">
-								<input id={'swatch-0-'+attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
-								<label for={'swatch-0-'+attrvalue.value}>{attrvalue.value}</label>
-							</div>
-						);
+						if(attrvalue.value.length < 6) {
+							return (
+								<div data-value={attrvalue.value} className="swatch-element plain available">
+									<input id={'swatch-0-'+ name +attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
+									<label for={'swatch-0-'+name+attrvalue.value}>{attrvalue.value}</label>
+								</div>
+							);
+						} else {
+							return (
+								<div data-value={attrvalue.value} className="swatch-element plain-text available">
+									<input id={'swatch-0-'+ name +attrvalue.value} type="radio" name={alldata.name} value={attrvalue.value} checked={attrvalue.selected} onClick={this.onClickAttribute}/>
+									<label for={'swatch-0-'+name+attrvalue.value}>{attrvalue.value}</label>
+								</div>
+							);
+						}
 					});
 				}
 				return (
@@ -395,7 +414,6 @@ class ProductDetails extends Component {
 			              <div className="model">
 			                <ul className="list-unstyled">
 			                  <li className="text-uppercase"><span>Item No: </span>{this.state.selectedPartnumber}</li>
-			                  <li className="text-uppercase"><span>Category: </span>{ this.state.primarycategory}</li>
 			                  <li className="text-uppercase"><span>Availability: </span>In Stock</li>
 			                </ul>
 			              </div>
@@ -404,11 +422,14 @@ class ProductDetails extends Component {
 			                <p>{this.state.description.shortdescription}</p>
 			              </div>
 			              
-			              <div className="row swatches pt-4">
-			              	<form ref="attributeForm">
-			              		{definingAttributeContent}
-			              	</form>
-			              </div>
+			              {this.state.child && this.state.child.length === 1 ?
+			            	  null :
+			            	  <div className="row swatches pt-4">
+				              	<form ref="attributeForm">
+				              		{definingAttributeContent}
+				              	</form>
+				              </div>
+			              }
 			              
 			              
 			              <div className="row d-flex justify-content-between">

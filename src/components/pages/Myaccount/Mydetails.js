@@ -45,11 +45,9 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });
 	    
-	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    let selfAddressUrl = process.env.REACT_APP_USER_GET_SELFADDRESS_URL;
 	    
-	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address/selfaddress';
-	    
-	    api.get(url)
+	    api.get(selfAddressUrl)
 	    .then((response) => {
 	    	console.log(response.data);
             this.setState({
@@ -114,11 +112,9 @@ class Mydetails extends Component {
 	    	withCredentials: true
 	    });	    
 	    
-	    let port = process.env.REACT_APP_USER_APP_PORT;
+	    let saveAddressUrl = process.env.REACT_APP_USER_POST_SAVE_ADDRESS_URL;
 	    
-	    let url = document.location.protocol + "//" +document.location.hostname + port +'/api/address';
-	    
-	    api.patch(url,
+	    api.patch(saveAddressUrl,
 	    	{
 	    	  "usersId": userId,
 	    	  "address":{

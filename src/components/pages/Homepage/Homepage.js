@@ -11,7 +11,7 @@ class Homepage extends Component {
 	}
 	
 	componentWillMount() {
-		document.title = "Welcome to Photos";
+		document.title = "Welcome to HCS";
 	}
 
 	
