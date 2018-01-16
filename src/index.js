@@ -15,6 +15,7 @@ import Category from './components/pages/Category/Category.js';
 import Basket from './components/pages/Basket/Basket.js';
 import Checkout from './components/pages/Checkout/Checkout.js';
 import OrderConfirmation from './components/pages/Checkout/OrderConfirmation.js';
+import GlobalCollect from './components/pages/Checkout/GlobalCollect.js';
 import CheckoutLogin from './components/pages/Checkout/CheckoutLogin.js';
 
 ReactDOM.render(
@@ -35,6 +36,7 @@ ReactDOM.render(
 					<Route path="/checkout" component={Checkout} ></Route>
 					<Route path="/confirmation" component={OrderConfirmation} ></Route>
 					<Route path="/checkoutlogin" component={CheckoutLogin} ></Route>
+					<Route path="/globalcollect" component={GlobalCollect} ></Route>
 					<Route path="*" component={PageNotFound} status={404}/>
 				</Switch>
 			</div>

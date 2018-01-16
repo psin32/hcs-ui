@@ -80,8 +80,9 @@ class OrderHistory extends Component {
             	orders : response.data,
     			items : response.data.items,
     			shippingaddress : response.data.shippingaddress,
+    			paymentType : response.data.paymentType,
     			paypalPayment : response.data.paypalPayment,
-    			payer : response.data.paypalPayment.payer,
+    			globalCollectPayment : response.data.globalCollectPayment,
     			responseReceived : true,
     			displayOrderHistory : false,
     			displayOrderDetails : true
@@ -171,6 +172,39 @@ class OrderHistory extends Component {
     		
     		pageHeader = "Order Details";
     		
+    	    let paymentDetails = null;
+    	    if(this.state.paymentType == 'PAYPAL') {
+    	    	paymentDetails = (
+    				<div className="row pt-3">
+    					<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
+    						<strong>Payment Method: </strong><br/>
+    						<strong>Paypal Email: </strong><br/>
+    						<strong>Paypal Amount: </strong>
+    					</div>
+    					<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
+    						Paypal<br/>
+    						{this.state.paypalPayment.payer.email}<br/>
+    						£{this.state.paypalPayment.amount}<br/>
+    					</div>
+    				</div>
+    	    	);
+    	    } else if(this.state.paymentType == 'GLOBALCOLLECT') {
+    	    	paymentDetails = (
+    				<div className="row pt-3">
+    					<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
+    						<strong>Payment Method: </strong><br/>
+    						<strong>Card Number: </strong><br/>
+    						<strong>Amount: </strong>
+    					</div>
+    					<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
+    						{this.state.globalCollectPayment.cardType}<br/>
+    						{this.state.globalCollectPayment.cardNumber}<br/>
+    						£{this.state.globalCollectPayment.amount}<br/>
+    					</div>
+    				</div>
+    			);
+    	    }
+    		
     	    const items = this.state.items.map((alldata, index) => {
 	  		      return (
 	  		    		  <div className="row p-3 items-ordered">
@@ -256,18 +290,7 @@ class OrderHistory extends Component {
 	  					      <div className="row order-and-shipping p-3">
 	  							<div className="col col-lg-6 col-md-6 col-sm-12 col-12 p-3">
 	  								<strong className="text-uppercase order-shipping-header">Payment Summary</strong><br/>
-	  								<div className="row pt-3">
-	  									<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
-	  										<strong>Payment Method: </strong><br/>
-	  										<strong>Paypal Email: </strong><br/>
-	  										<strong>Paypal Amount: </strong>
-	  									</div>
-	  									<div className="col col-lg-6 col-md-6 col-sm-6 col-6">
-	  										Paypal<br/>
-	  										{this.state.payer.email}<br/>
-	  										£{this.state.paypalPayment.amount}<br/>
-	  									</div>
-	  								</div>
+	  								{paymentDetails}
 	  							</div>
 	  							<div className="col col-lg-6 col-md-6 col-sm-12 col-12 p-3">
 	  								<strong className="text-uppercase order-shipping-header">Order Summary</strong><br/>

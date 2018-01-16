@@ -15,7 +15,9 @@ class Payment extends Component {
 			paypalSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 paypal-panel',
 			cardSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 card-panel payment-hidden',
 			responseReceived : true,
-			tandc : ''
+			tandc : '',
+			globalCollectIframeURL : '',
+			cardDetails: []
 		};
 	}
 	
@@ -83,17 +85,151 @@ class Payment extends Component {
 			cardSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 card-panel payment-hidden'
         });
 	}
-
+	
 	onClickCardSection() {
-        this.setState({
-			paypalStyle : 'paypal-section',
-			cardStyle : 'card-section section--active',
-			paypalSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 paypal-panel payment-hidden',
-			cardSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 card-panel'
+		this.setState({
+			responseReceived : false
         });
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+
+	    let globalCollectSavedCards = process.env.REACT_APP_PAYMENT_APP_GET_CARDS_URL;
+	    
+	    api.post(globalCollectSavedCards)
+		.then((response) => {
+			this.setState({
+				responseReceived : true
+	        });
+	    	if (response.status === 200) {
+	    		
+	    		if(response.data === '') {
+	    			this.createGlobalCollectIframe();
+	    		} else {
+	    			this.setState({
+	    				cardDetails : response.data
+	    	        });
+	    		}
+	    	}
+			this.setState({
+				paypalStyle : 'paypal-section',
+				cardStyle : 'card-section section--active',
+				paypalSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 paypal-panel payment-hidden',
+				cardSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 card-panel'
+	        });
+		})
+		.catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+		}); 
+	}
+	
+	savedCardIFrame() {
+		this.createGlobalCollectIframe(document.getElementById("saved-cards").value);
+	}
+
+	createGlobalCollectIframe(cardId) {
+		
+		this.setState({
+			responseReceived : false
+        });
+		const cookies = new Cookies();
+		const token = cookies.get('TOKEN');
+
+	    const api = axios.create({
+	    	headers: {'Authorization': 'Bearer '+token},
+	    	withCredentials: true
+	    });
+
+	    let globalCollectPaymentURL = process.env.REACT_APP_ORDER_APP_POST_CREATE_GLOBALCOLLECT_PAYMENT_URL;
+	    if(cardId) {
+	    	globalCollectPaymentURL = process.env.REACT_APP_ORDER_APP_POST_CREATE_GLOBALCOLLECT_PAYMENT_URL+"/"+cardId;
+	    }
+	    
+	    api.post(globalCollectPaymentURL)
+		.then((response) => {
+			this.setState({
+				responseReceived : true
+	        });
+	    	if (response.status === 200) {
+	    		this.setState({
+	    			globalCollectIframeURL : response.data
+		        });
+	    	}
+			this.setState({
+				paypalStyle : 'paypal-section',
+				cardStyle : 'card-section section--active',
+				paypalSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 paypal-panel payment-hidden',
+				cardSection : 'col col-lg-12 col-md-12 col-sm-12 col-12 card-panel'
+	        });
+		})
+		.catch((error) => {
+	    	if (error.response) {
+				this.setState({
+					responseReceived : true
+		        });		
+		    	if(error.response.status === 403) {
+		    		if (null == token) {
+		    			this.props.history.push("/clearcookie#accessdenied");
+		    		} else {
+		    			this.props.history.push("/clearcookie#timeout");	
+		    		}
+		    	}
+	    	}
+		}); 
 	}
 	
     render() {
+    	
+    	let cardContent = null;
+    	if(this.state.cardDetails) {
+    		
+    		const cards = this.state.cardDetails.map((alldata, index) => {
+    			return (
+    				<option key={ index } value={ alldata.cardId }>{ alldata.cardNumber }, { alldata.expiryDate }, { alldata.cardType }</option>
+  		      	);
+    		});
+
+    		cardContent = (
+				<div className={this.state.cardSection}>
+					<div className="mt-5 text-left"><strong>Saved Cards:</strong></div>
+					<select className="form-control mt-2" id="saved-cards" name="saved-cards">
+						{cards}
+					</select>
+					<div className="row">
+						<div className="col col-lg-6 col-md-6 col-sm-12 col-12 text-right-button">
+							<button className="btn btn-unique mt-3 mb-3" onClick={this.savedCardIFrame.bind(this)}>Pay using this card</button>
+						</div>
+						<div className="col col-lg-6 col-md-6 col-sm-12 col-12 text-left-button">
+							<button className="btn btn-unique mt-3 mb-3" onClick={this.createGlobalCollectIframe.bind(this)}>Pay using new card</button>
+						</div>
+					</div>
+				</div>
+    		);
+    	}
+
+    	if(this.state.globalCollectIframeURL) {
+    		cardContent = (
+				<div className={this.state.cardSection}>
+					<iframe src={this.state.globalCollectIframeURL} className="gc-iframe"></iframe>
+				</div>
+    		);
+    	}
+
 	    return (
 	         <div className="card-block">
 	         	<Loader data={this.state.responseReceived} fullscreen="true"/>
@@ -130,64 +266,7 @@ class Payment extends Component {
 	                        </div>
 						</form>
 					</div>					
-					<div className={this.state.cardSection}>
-						<div className="container-fluid py-3">
-						    <div className="row">
-						        <div className="col-12 col-sm-12 col-md-12 col-lg-12 mx-auto text-left">
-						            <div id="pay-invoice" className="card">
-						                <div className="card-body">
-						                    <form action="" method="post" novalidate="novalidate">
-						                        <div className="form-group text-center">
-						                            <ul className="list-inline">
-						                                <li className="list-inline-item"><i className="text-muted fa fa-cc-visa fa-2x"></i></li>
-						                                <li className="list-inline-item"><i className="fa fa-cc-mastercard fa-2x"></i></li>
-						                                <li className="list-inline-item"><i className="fa fa-cc-amex fa-2x"></i></li>
-						                                <li className="list-inline-item"><i className="fa fa-cc-discover fa-2x"></i></li>
-						                            </ul>
-						                        </div>
-						                        <div className="form-group has-success">
-						                            <label for="cc-name" className="control-label mb-1">Name on card</label>
-						                            <input id="cc-name" name="cc-name" type="text" className="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error" />
-						                            <span className="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
-						                        </div>
-						                        <div className="form-group">
-						                            <label for="cc-number" className="control-label mb-1">Card number</label>
-						                            <input id="cc-number" name="cc-number" type="tel" className="form-control cc-number identified visa" value="" data-val="true" data-val-required="Please enter the card number" data-val-cc-number="Please enter a valid card number" autocomplete="cc-number" />
-						                            <span className="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
-						                        </div>
-						                        <div className="row">
-						                            <div className="col-6">
-						                                <div className="form-group">
-						                                    <label for="cc-exp" className="control-label mb-1">Expiration</label>
-						                                    <input id="cc-exp" name="cc-exp" type="tel" className="form-control cc-exp" value="" data-val="true" data-val-required="Please enter the card expiration" data-val-cc-exp="Please enter a valid month and year" placeholder="MM / YY" autocomplete="cc-exp" />
-						                                    <span className="help-block" data-valmsg-for="cc-exp" data-valmsg-replace="true"></span>
-						                                </div>
-						                            </div>
-						                            <div className="col-6">
-						                                <label for="x_card_code" className="control-label mb-1">CVV</label>
-						                                <div className="input-group">
-						                                    <input id="x_card_code" name="x_card_code" type="tel" className="form-control cc-cvc" value="" data-val="true" data-val-required="Please enter the security code" data-val-cc-cvc="Please enter a valid security code" autocomplete="off" />
-						                                    <div className="input-group-addon">
-						                                        <span className="fa fa-question-circle fa-lg" data-toggle="popover" data-container="body" data-html="true" data-title="Security Code" 
-						                                        data-content="<div className='text-center one-card'>The 3 digit code on back of the card..<div className='visa-mc-cvc-preview'></div></div>"
-						                                        data-trigger="hover"></span>
-						                                    </div>
-						                                </div>
-						                            </div>
-						                        </div>
-						                        <div style={{textAlign : "center"}}>
-						                            <button id="payment-button" type="submit" className="btn btn-unique btn-lg btn-info">
-						                                <i className="fa fa-lock fa-lg"></i>&nbsp;
-						                                <span id="payment-button-amount">Pay £{this.props.orders.formattedOrdertotal}</span>
-						                            </button>
-						                        </div>
-						                    </form>
-						                </div>
-						            </div>
-						        </div>
-						    </div>
-						</div>
-					</div>
+					{cardContent}
 	            </div>	            
 	         </div>
 	    );
