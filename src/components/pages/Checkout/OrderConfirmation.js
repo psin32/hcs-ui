@@ -79,6 +79,10 @@ class OrderConfirmation extends Component {
 		    	if(error.response.status === 500) {
 		    		this.props.history.push("/checkout");
 		    	}
+		    	
+		    	if(error.response.status === 400) {
+		    		this.props.history.push("/checkout");
+		    	}
 	    	}
 	    });
 	}
