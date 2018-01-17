@@ -762,12 +762,16 @@ to {
 	opacity: 1;
 }
 
-.swatch input:not (:checked ) +label {
+.swatch input +label {
 	border-color: #edeff2 !important;
 }
 
-.swatch input:not (:checked ) +label:hover {
-	border-color: #b5b6bd !important;
+.swatch input:checked +label {
+	border-color: #086fcf !important;
+}
+
+.swatch input +label:hover {
+	border-color: #086fcf !important;
 }
 
 .swatch .plain input:not (:checked ) +label {
