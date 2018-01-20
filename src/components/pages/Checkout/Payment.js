@@ -107,7 +107,7 @@ class Payment extends Component {
 	        });
 	    	if (response.status === 200) {
 	    		
-	    		if(response.data === '') {
+	    		if(response.data.length === 0) {
 	    			this.createGlobalCollectIframe();
 	    		} else {
 	    			this.setState({
