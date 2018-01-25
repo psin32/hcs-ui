@@ -37,7 +37,6 @@ class RegistrationForm extends Component {
 	    	  "users":{
 	    	    "username": email,
 	    	    "registertype": "R",
-	    	    "password": password,
 	    	    "profiletype": "C"
 	    	  },
 	    	  "userreg":{
@@ -47,7 +46,6 @@ class RegistrationForm extends Component {
 	    	    "addresstype": "S",
 	    	    "status": "P",
 	    	    "email1": email,
-	    	    "nickname": firstname,
 	    	    "title": title,
 	    	    "firstname": firstname,
 	    	    "lastname": lastname,
