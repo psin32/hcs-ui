@@ -196,7 +196,7 @@ class Payment extends Component {
     render() {
     	
     	let cardContent = null;
-    	if(this.state.cardDetails) {
+    	if(this.state.cardDetails && this.state.cardDetails.length>0) {
     		
     		const cards = this.state.cardDetails.map((alldata, index) => {
     			return (

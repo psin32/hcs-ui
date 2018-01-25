@@ -51,7 +51,6 @@ class Category extends Component {
 	    
 	    api.get(categoryDetailsURL +url)
 	    .then((response) => {
-	    	console.log(response.data.catentries);
             this.setState({
             	categorydata : response.data.category,
             	subcategorydata : response.data.category.childcategories,
